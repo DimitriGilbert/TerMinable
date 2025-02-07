@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "terminable",
+  "version": "0.0.1",
+  "description": "A customizable terminal simulator component for React applications",
+  "homepage": "https://github.com/butter3415/terminable",
+  "main": "registry/components/ui/Terminable.tsx",
+  "style": "registry/styles/Terminable.css",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/butter3415/terminable"
+  },
+  "files": [
+    "registry/components/ui/Terminable.tsx"
+  ],
+  "items": [
+    {
+      "name": "terminable",
+      "type": "component",
+      "registryDependencies": ["menubar"],
+      "dependencies": ["sonner"],
+      "files": [
+        {
+          "name": "terminable",
+          "type": "component",
+          "path": "registry/components/ui/Terminable.tsx"
+        }
+      ]
+    }
+  ]
+} 
