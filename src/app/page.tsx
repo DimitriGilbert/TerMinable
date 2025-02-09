@@ -19,7 +19,7 @@ export default function HomePage() {
   const commands = useMemo(
     () => [
       {
-        prompt: "It all start with a prompt",
+        prompt: "It all starts with a prompt",
         output: "... and an output, of course !",
       },
       {
@@ -54,6 +54,7 @@ export default function HomePage() {
           delay: 3000,
           placeholder: (
             <img
+              className="h-12 w-auto"
               src="https://gifdb.com/images/high/animated-energetic-dancing-banana-a0if4xeqivxs5jdy.gif"
               alt="logo"
             />
