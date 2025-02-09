@@ -1,9 +1,16 @@
 "use client";
-import { useTheme } from "~/components/theme-provider";
+import { DocsSection } from "~/components/docs/DocsSection";
+import { DocsCodeBlock } from "~/components/docs/DocsCodeBlock";
+import { DocsTable } from "~/components/docs/DocsTable";
 import TerminableExample from "~/components/TerminableExample";
 import { toast } from "sonner";
 import { useInView } from "react-intersection-observer";
-import { TerminableExampleProps } from "~/components/TerminableExample";
+import { type TerminableExampleProps } from "~/components/TerminableExample";
+import { GlowLink } from "~/components/ui/glow-link";
+import Link from "next/link";
+import { Button } from "~/components/ui/button";
+import { FaCopy } from "react-icons/fa";
+import { PkgMngCmdCopy } from "~/components/PkgMngCmdCopy";
 
 const LazyTerminableExample = (props: TerminableExampleProps) => {
   const { ref, inView } = useInView({
@@ -20,518 +27,200 @@ const LazyTerminableExample = (props: TerminableExampleProps) => {
 
 export default function Docs() {
   return (
-    <div className={`min-h-screen py-12`}>
+    <div className="min-h-screen py-12">
       <div className="container mx-auto px-4">
         <header className="mb-8 text-center">
-          <h1 className="mb-2 text-4xl font-bold">
-            <span className="text-green-400">Terminable</span> Component
+          <h1 className="mb-2 text-4xl font-bold text-foreground">
+            <span className="text-primary">Terminable</span> Component
             Documentation
           </h1>
-          <p className="text-gray-400">
-            Simulate terminal interactions in your React applications
+          <p className="text-foreground/80">
+            Simulate terminal interactions in your documentation
           </p>
         </header>
 
-        <section className="mb-12">
-          <h2 className="mb-4 text-3xl font-semibold text-green-400">
-            Introduction
-          </h2>
-          <p className="text-lg leading-relaxed text-gray-300">
-            The <code className="text-yellow-300">Terminable</code> component
-            provides a way to simulate a terminal interface within your React
-            application. It's designed to display a sequence of commands and
-            their outputs in an animated, terminal-like fashion, enhancing user
-            experience and providing a dynamic way to present information.
+        <DocsSection title="Introduction">
+          <p className="mb-4">
+            Wether to show an example of your CLI that is not video, or just to
+            look cool (yes, terminals are cool ! they. are.){" "}
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-primary">
+              Terminable
+            </code>{" "}
+            is for you.
           </p>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="mb-4 text-3xl font-semibold text-green-400">Usage</h2>
-          <p className="mb-4 text-lg leading-relaxed text-gray-300">
-            To integrate the <code className="text-yellow-300">Terminable</code>{" "}
-            component into your project, import it and pass an array of command
-            objects to the <code className="text-yellow-300">commands</code>{" "}
-            prop.
+          <p className="mb-4">
+            It is build using{" "}
+            <GlowLink
+              href="https://ui.shadcn.com/"
+              target="_blank"
+              color="rgba(173,251,28,0.8)"
+              size="12px"
+              duration={0.5}
+              scale={1.1}
+              className="font-semibold drop-shadow-[0_0_8px_rgba(173,251,28,0.8)]"
+              glowClassName="rounded-md px-1.5 py-0.5 bg-primary/10 dark:bg-primary-foreground/10"
+            >
+              Shadcn/ui
+            </GlowLink>{" "}
+            components, and you can (only) install it using my custom{" "}
+            <Link
+              href="https://ui.shadcn.com/docs/installation/nextjs"
+              target="_blank"
+              className="rounded bg-muted px-1 py-0.5 font-mono text-primary"
+            >
+              shadcn/ui registry
+            </Link>
           </p>
-          <div className="overflow-x-auto rounded-md bg-gray-800 p-4">
-            <pre className="text-sm text-gray-100">
-              <code>
-                {`import Terminable from "~registry/components/ui/Terminable";
+        </DocsSection>
 
-const MyComponent = () => {
-  const commands = [
-    {
-      prompt: "echo Hello, World!",
-      output: "Hello, World!",
-    },
-  ];
+        <DocsSection title="Installation">
+          <p className="mb-4">
+            To install the{" "}
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-primary">
+              Terminable
+            </code>{" "}
+            component, you can use the following command:
+          </p>
+          <PkgMngCmdCopy
+            className="w-full max-w-3xl"
+            buttonClassName="px-4 py-2"
+            preClassName="w-full"
+            cmd={`shadcn/ui@latest add "https://DimitriGilbert.github.io/TerMinable/registry.json"`}
+          />
+        </DocsSection>
 
-  return <Terminable commands={commands} />;
-};
+        <DocsSection title="Usage">
+          <p className="mb-4">
+            To integrate the{" "}
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-primary">
+              Terminable
+            </code>{" "}
+            component into your project...
+          </p>
+          <DocsCodeBlock>
+            {`import Terminable from "~registry/components/ui/Terminable";`}
+          </DocsCodeBlock>
+        </DocsSection>
 
-export default MyComponent;
-`}
-              </code>
-            </pre>
-          </div>
-        </section>
+        <DocsSection title="Props">
+          <DocsTable
+            headers={["Name", "Type", "Default", "Description"]}
+            rows={[
+              [
+                <code className="text-primary">commands</code>,
+                <code>CommandEntry[]</code>,
+                "-",
+                "An array of command objects to be executed in the terminal.",
+              ],
+              // Add other rows here
+            ]}
+          />
+        </DocsSection>
 
-        <section className="mb-12">
-          <h2 className="mb-4 text-3xl font-semibold text-green-400">Props</h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-700">
-              <thead>
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Type
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Default
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Description
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700">
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">commands</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>CommandEntry[]</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">-</td>
-                  <td className="px-6 py-4 text-gray-300">
-                    An array of command objects to be executed in the terminal.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">defaultTypingSpeed</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>number</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>50</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Default typing speed in milliseconds per character.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">defaultTypingRandom</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>number</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>30</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Randomness factor for typing speed, as a percentage.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">defaultOutputSpeed</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>number</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>30</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Default delay before displaying each line of output, in
-                    milliseconds.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">autoStart</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>boolean</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>true</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Whether the terminal should start executing commands
-                    automatically.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">width</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>"w-full max-w-[800px]"</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Tailwind CSS width class for the terminal.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">height</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>"min-h-[300px] max-h-[500px]"</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Tailwind CSS height class for the terminal.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">termPrompt</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string | ReactNode</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>"$ "</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    The terminal prompt string.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">startLine</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string | ReactNode</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>"__________"</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    The initial line displayed in the terminal.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">backgroundColor</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>"bg-[#1a1a1a]"</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Tailwind CSS background color class for the terminal.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">promptColor</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>"text-[#00ff00]"</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Tailwind CSS text color class for the terminal prompt.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">outputColor</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>"text-white"</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Tailwind CSS text color class for the terminal output.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">title</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string | ReactNode</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>""</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Title displayed in the terminal window.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">commandDelay</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>number</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>1000</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Delay between each command execution, in milliseconds.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">allowCopy</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>boolean</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>true</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Whether to allow copying the command to the clipboard.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">start</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>boolean</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>true</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Whether the terminal should start automatically.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="mb-4 text-3xl font-semibold text-green-400">
-            CommandEntry Object Structure
-          </h2>
-          <p className="mb-4 text-lg leading-relaxed text-gray-300">
+        <DocsSection title="CommandEntry Object Structure">
+          <p className="mb-4">
             Each command object in the{" "}
-            <code className="text-yellow-300">commands</code> array defines a
-            command to be executed in the terminal. Here are the properties you
-            can use:
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-primary">
+              commands
+            </code>{" "}
+            array defines a command to be executed in the terminal. Here are the
+            properties you can use:
           </p>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-700">
-              <thead>
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Type
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Description
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700">
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">prompt</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string | ReactNode</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    The command prompt string or ReactNode to be displayed.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">output</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>
-                      string | OutputContent | Array&lt;string |
-                      OutputContent&gt;
-                    </code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    The output of the command. Can be a string, OutputContent
-                    object, or an array of both.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">typingSpeed</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>number</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Typing speed for this command, overriding the default.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">typingRandom</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>number</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Randomness factor for typing speed, overriding the default.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">delay</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>number</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Delay before executing this command, overriding the global
-                    delay.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">outputDelay</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>number</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Delay before displaying the output of this command.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">onDone</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>() =&gt; void</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Callback function executed when the command is finished.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">onCopy</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>() =&gt; void</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Callback function executed when the command is copied.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">onBeforeOutput</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>() =&gt; void</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Callback function executed before the output is displayed.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+          <DocsTable
+            headers={["Name", "Type", "Description"]}
+            rows={[
+              [
+                `<code className="text-primary">prompt</code>`,
+                `<code>string | ReactNode</code>`,
+                "The command prompt string or ReactNode to be displayed.",
+              ],
+              [
+                `<code className="text-primary">output</code>`,
+                ` <code>
+                  string | OutputContent | Array&lt;string |
+                  OutputContent&gt;
+                </code>`,
+                `The output of the command. Can be a string, OutputContent
+                object, or an array of both."`,
+              ],
+              [
+                `<code className="text-primary">typingSpeed</code>`,
+                `<code>number</code>`,
+                `Typing speed for this command, overriding the default.`,
+              ],
+              [
+                `<code className="text-primary">typingRandom</code>`,
+                `<code>number</code>`,
+                `Randomness factor for typing speed, overriding the default.`,
+              ],
+              [
+                `<code className="text-primary">delay</code>`,
+                `<code>number</code>`,
+                `Delay before executing this command, overriding the global
+                delay.`,
+              ],
+              [
+                `<code className="text-primary">outputDelay</code>`,
+                `<code>number</code>`,
+                `Delay before displaying the output of this command.`,
+              ],
+              [
+                `<code className="text-primary">onDone</code>`,
+                `<code>() =&gt; void</code>`,
+                `Callback function executed when the command is finished.`,
+              ],
+              [
+                `<code className="text-primary">onCopy</code>`,
+                `<code>() =&gt; void</code>`,
+                `Callback function executed when the command is copied.`,
+              ],
+              [
+                `<code className="text-primary">onBeforeOutput</code>`,
+                `<code>() =&gt; void</code>`,
+                `Callback function executed before the output is displayed.`,
+              ],
+            ]}
+          />
+        </DocsSection>
 
-        <section className="mb-12">
-          <h2 className="mb-4 text-3xl font-semibold text-green-400">
-            OutputContent Object Structure
-          </h2>
-          <p className="mb-4 text-lg leading-relaxed text-gray-300">
-            The <code className="text-yellow-300">OutputContent</code> object
-            allows you to specify complex output scenarios with placeholders and
-            delays.
+        <DocsSection title="OutputContent Object Structure">
+          <p className="mb-4">
+            The{" "}
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-primary">
+              OutputContent
+            </code>{" "}
+            object allows you to specify complex output scenarios with
+            placeholders and delays.
           </p>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-700">
-              <thead>
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Type
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Description
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700">
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">delay</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>number</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Delay before the content is displayed, in milliseconds.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">placeholder</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string | ReactNode</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    Placeholder content to display while waiting for the delay.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code className="text-yellow-300">content</code>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <code>string | ReactNode</code>
-                  </td>
-                  <td className="px-6 py-4 text-gray-300">
-                    The actual content to display after the delay.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+          <DocsTable
+            headers={["Name", "Type", "Description"]}
+            rows={[
+              [
+                <code className="text-primary">delay</code>,
+                <code>number</code>,
+                "Delay before the content is displayed, in milliseconds.",
+              ],
+              [
+                <code className="text-primary">placeholder</code>,
+                <code>string | ReactNode</code>,
+                "Placeholder content to display while waiting for the delay.",
+              ],
+              [
+                <code className="text-primary">content</code>,
+                <code>string | ReactNode</code>,
+                "The actual content to display after the delay.",
+              ],
+            ]}
+          />
+        </DocsSection>
 
-        <section className="mb-12">
-          <h2 className="mb-4 text-3xl font-semibold text-green-400">
-            Examples
-          </h2>
-          <p className="mb-4 text-lg leading-relaxed text-gray-300">
+        <DocsSection title="Examples">
+          <p className="mb-4">
             Explore these examples to understand how to use the{" "}
-            <code className="text-yellow-300">Terminable</code> component in
-            different scenarios.
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-primary">
+              Terminable
+            </code>{" "}
+            component in different scenarios.
           </p>
 
           <div className="grid gap-8 md:grid-cols-2">
@@ -901,7 +590,7 @@ export default MyComponent;
               `}
             />
           </div>
-        </section>
+        </DocsSection>
       </div>
     </div>
   );

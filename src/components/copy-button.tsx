@@ -1,14 +1,17 @@
 "use client";
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
-
+import { toast } from "sonner";
 export function CopyButton({ value, className }: { value: string; className?: string }) {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard.writeText(value).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {
+      toast.error('Failed to copy to clipboard!');
+    });
   };
 
   return (

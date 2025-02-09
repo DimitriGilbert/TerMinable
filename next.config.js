@@ -5,6 +5,10 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  output: "export",
+  basePath: process.env.NODE_ENV === 'production' ? '/TerMinable' : '', // Replace with your repository name
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/TerMinable/' : '', // Replace with your repository name
+};
 
 export default config;

@@ -16,13 +16,13 @@
   "items": [
     {
       "name": "terminable",
-      "type": "component",
+      "type": "registry:component",
       "registryDependencies": ["menubar"],
       "dependencies": ["sonner"],
       "files": [
         {
           "name": "terminable",
-          "type": "component",
+          "type": "registry:component",
           "path": "registry/components/ui/Terminable.tsx"
         }
       ]
