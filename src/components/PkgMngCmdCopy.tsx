@@ -29,7 +29,7 @@ export function PkgMngCmdCopy({
 
   const handleCopy = () => {
     navigator.clipboard
-      .writeText(selectedManager?.command || "")
+      .writeText(selectedManager?.command ?? "")
       .then(() => {
         toast.success("Copied to clipboard!");
       })

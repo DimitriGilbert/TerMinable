@@ -4,22 +4,10 @@ import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import Terminable from "~registry/components/ui/Terminable";
-import { FaCopy } from "react-icons/fa";
 import { GlowLink } from "~/components/ui/glow-link";
 import { PkgMngCmdCopy } from "~/components/PkgMngCmdCopy";
 
-const componentRegistry =
-  "https://DimitriGilbert.github.io/TerMinable/registry.json";
-const shdCmd = "shadcn/ui@latest add " + componentRegistry;
-const packageManagers = [
-  { name: "npm", command: "npx " + shdCmd },
-  { name: "yarn", command: "yarn " + shdCmd },
-  { name: "pnpm", command: "pnpm " + shdCmd },
-  { name: "bun", command: "bun x --bun " + shdCmd },
-];
-
 export default function HomePage() {
-  const [selectedManager, setSelectedManager] = useState(packageManagers[0]);
   const [TermTitle, setTermTitle] = useState<string | React.ReactNode>(
     "Terminable",
   );
@@ -218,17 +206,6 @@ export default function HomePage() {
     ],
     [],
   );
-
-  const handleCopy = () => {
-    navigator.clipboard
-      .writeText(selectedManager?.command || "")
-      .then(() => {
-        toast.success("Copied to clipboard!");
-      })
-      .catch(() => {
-        toast.error("Failed to copy to clipboard!");
-      });
-  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">

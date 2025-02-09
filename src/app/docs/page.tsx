@@ -107,8 +107,10 @@ export default function Docs() {
             headers={["Name", "Type", "Default", "Description"]}
             rows={[
               [
-                <code className="text-primary">commands</code>,
-                <code>CommandEntry[]</code>,
+                <code key="commands" className="text-primary">
+                  commands
+                </code>,
+                <code key="commands0">CommandEntry[]</code>,
                 "-",
                 "An array of command objects to be executed in the terminal.",
               ],
@@ -196,18 +198,24 @@ export default function Docs() {
             headers={["Name", "Type", "Description"]}
             rows={[
               [
-                <code className="text-primary">delay</code>,
-                <code>number</code>,
+                <code key="delay" className="text-primary">
+                  delay
+                </code>,
+                <code key="delay0">number</code>,
                 "Delay before the content is displayed, in milliseconds.",
               ],
               [
-                <code className="text-primary">placeholder</code>,
-                <code>string | ReactNode</code>,
+                <code key="placeholder" className="text-primary">
+                  placeholder
+                </code>,
+                <code key="placeholder0">string | ReactNode</code>,
                 "Placeholder content to display while waiting for the delay.",
               ],
               [
-                <code className="text-primary">content</code>,
-                <code>string | ReactNode</code>,
+                <code key="content" className="text-primary">
+                  content
+                </code>,
+                <code key="content0">string | ReactNode</code>,
                 "The actual content to display after the delay.",
               ],
             ]}
