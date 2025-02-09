@@ -85,7 +85,7 @@ export default function Docs() {
             className="w-full max-w-3xl"
             buttonClassName="px-4 py-2"
             preClassName="w-full"
-            cmd={`shadcn/ui@latest add "https://DimitriGilbert.github.io/TerMinable/registry.json"`}
+            cmd={`shadcn/ui@latest add https://DimitriGilbert.github.io/TerMinable/r/terminable.json`}
           />
         </DocsSection>
 

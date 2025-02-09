@@ -237,7 +237,7 @@ export default function HomePage() {
           className="w-full max-w-2xl"
           buttonClassName="px-6 py-3"
           preClassName="w-full"
-          cmd={`shadcn/ui@latest add "https://DimitriGilbert.github.io/TerMinable/registry.json"`}
+          cmd={`shadcn/ui@latest add https://DimitriGilbert.github.io/TerMinable/r/terminable.json`}
         />
       </div>
 
