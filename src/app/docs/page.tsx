@@ -132,53 +132,71 @@ export default function Docs() {
             headers={["Name", "Type", "Description"]}
             rows={[
               [
-                `<code className="text-primary">prompt</code>`,
-                `<code>string | ReactNode</code>`,
+                <code key="prompt" className="text-primary">
+                  prompt
+                </code>,
+                <code key="prompt0">string | ReactNode</code>,
                 "The command prompt string or ReactNode to be displayed.",
               ],
               [
-                `<code className="text-primary">output</code>`,
-                ` <code>
+                <code key="output" className="text-primary">
+                  output
+                </code>,
+                <code key="output0">
                   string | OutputContent | Array&lt;string |
                   OutputContent&gt;
-                </code>`,
+                </code>,
                 `The output of the command. Can be a string, OutputContent
                 object, or an array of both."`,
               ],
               [
-                `<code className="text-primary">typingSpeed</code>`,
-                `<code>number</code>`,
+                <code key="typingSpeed" className="text-primary">
+                  typingSpeed
+                </code>,
+                <code key="typingSpeed0">number</code>,
                 `Typing speed for this command, overriding the default.`,
               ],
               [
-                `<code className="text-primary">typingRandom</code>`,
-                `<code>number</code>`,
+                <code key="typingRandom" className="text-primary">
+                  typingRandom
+                </code>,
+                <code key="typingRandom0">number</code>,
                 `Randomness factor for typing speed, overriding the default.`,
               ],
               [
-                `<code className="text-primary">delay</code>`,
-                `<code>number</code>`,
+                <code key="delay" className="text-primary">
+                  delay
+                </code>,
+                <code key="delay0">number</code>,
                 `Delay before executing this command, overriding the global
                 delay.`,
               ],
               [
-                `<code className="text-primary">outputDelay</code>`,
-                `<code>number</code>`,
+                <code key="outputDelay" className="text-primary">
+                  outputDelay
+                </code>,
+                <code key="outputDelay0">number</code>,
                 `Delay before displaying the output of this command.`,
               ],
               [
-                `<code className="text-primary">onDone</code>`,
-                `<code>() =&gt; void</code>`,
+                <code key="onDone" className="text-primary">
+                  onDone
+                </code>,
+                <code key="onDone0">() =&gt; void</code>,
                 `Callback function executed when the command is finished.`,
               ],
               [
-                `<code className="text-primary">onCopy</code>`,
-                `<code>() =&gt; void</code>`,
+                <code key="onCopy" className="text-primary">
+                  onCopy
+                </code>,
+                <code key="onCopy0">() =&gt; void</code>,
                 `Callback function executed when the command is copied.`,
               ],
               [
-                `<code className="text-primary">onBeforeOutput</code>`,
-                `<code>() =&gt; void</code>`,
+                <code key="onBeforeOutput" className="text-primary">
+                  onBeforeOutput
+                </code>,
+                <code key="onBeforeOutput0">() =&gt; void</code>,
                 `Callback function executed before the output is displayed.`,
               ],
             ]}
