@@ -21,7 +21,7 @@ export type DisplayEntry = {
 }
 
 export type CommandEntry = {
-  prompt: string | React.ReactNode;
+  prompt: string | React.ReactNode | Array<string | React.ReactNode>;
   output?: string | OutputContent | React.ReactNode | Array<string | OutputContent | React.ReactNode>;
   typingSpeed?: number;
   typingRandom?: number;
@@ -181,21 +181,24 @@ export default function Terminable({
           await new Promise((resolve) => setTimeout(resolve, cmd.delay ?? commandDelay));
         }
 
-        // Add command prompt
-        setDisplay((prev) => [...prev, { type: "command", content: "", done: false }]);
+        // Helper function to type a single prompt
+        const typePrompt = async (prompt: string | React.ReactNode) => {
+          // Add command prompt
+          setDisplay((prev) => [...prev, { type: "command", content: "", done: false }]);
 
-        // Handle ReactNode prompt
-        if (typeof cmd.prompt !== "string") {
-          setDisplay((prev) => {
-            const lastEntry = prev[prev.length - 1];
-            if (lastEntry?.type === "command") {
-              return [...prev.slice(0, -1), { ...lastEntry, content: cmd.prompt, done: true }];
-            }
-            return prev;
-          });
-        } else {
+          if (typeof prompt !== "string") {
+            setDisplay((prev) => {
+              const lastEntry = prev[prev.length - 1];
+              if (lastEntry?.type === "command") {
+                return [...prev.slice(0, -1), { ...lastEntry, content: prompt, done: true }];
+              }
+              return prev;
+            });
+            return;
+          }
+
           // Type the command
-          const trimmedPrompt = cmd.prompt.trim();
+          const trimmedPrompt = prompt.trim();
           let currentContent = "";
           
           for (const char of trimmedPrompt) {
@@ -224,6 +227,15 @@ export default function Terminable({
             }
             return prev;
           });
+        };
+
+        // Process all prompts
+        if (Array.isArray(cmd.prompt)) {
+          for (const prompt of cmd.prompt) {
+            await typePrompt(prompt);
+          }
+        } else {
+          await typePrompt(cmd.prompt);
         }
 
         // Process outputs
