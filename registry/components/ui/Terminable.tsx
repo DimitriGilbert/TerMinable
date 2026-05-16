@@ -1,12 +1,7 @@
 "use client";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import {
-  Menubar,
-  MenubarMenu,
-  MenubarTrigger,
-  MenubarContent,
-} from "~/components/ui/menubar";
-import { toast } from "sonner";
+
+// ── Types ────────────────────────────────────────────────────────────────────
 
 export type OutputContent = {
   delay?: number;
@@ -18,11 +13,15 @@ export type DisplayEntry = {
   type: "command" | "output";
   content: string | React.ReactNode;
   done?: boolean;
-}
+};
 
 export type CommandEntry = {
   prompt: string | React.ReactNode | Array<string | React.ReactNode>;
-  output?: string | OutputContent | React.ReactNode | Array<string | OutputContent | React.ReactNode>;
+  output?:
+    | string
+    | OutputContent
+    | React.ReactNode
+    | Array<string | OutputContent | React.ReactNode>;
   typingSpeed?: number;
   typingRandom?: number;
   delay?: number;
@@ -30,76 +29,222 @@ export type CommandEntry = {
   onDone?: () => void;
   onCopy?: () => void;
   onBeforeOutput?: () => void;
-}
+};
+
+export type TitleBarVariant = "macos" | "windows" | "linux" | "minimal" | "none";
 
 export type TerminableProps = {
   commands: CommandEntry[];
   defaultTypingSpeed?: number;
   defaultTypingRandom?: number;
   defaultOutputSpeed?: number;
-  width?: string; // Tailwind width class
-  height?: string; // Tailwind height class
+  width?: string;
+  height?: string;
   termPrompt?: string | React.ReactNode;
   startLine?: string | React.ReactNode;
-  backgroundColor?: string; // Tailwind or custom color
-  promptColor?: string; // Tailwind or custom color
-  outputColor?: string; // Tailwind or custom color
-  greenMenu?: React.ReactNode;
-  yellowMenu?: React.ReactNode;
-  redMenu?: React.ReactNode;
+  backgroundColor?: string;
+  promptColor?: string;
+  outputColor?: string;
   title?: string | React.ReactNode;
-  commandDelay?: number; // New prop for delay between commands
-  allowCopy?: boolean; // New prop to control copy functionality
+  commandDelay?: number;
+  allowCopy?: boolean;
   start?: boolean;
-}
+  titleBarVariant?: TitleBarVariant;
+  onError?: (error: Error) => void;
+  onCopySuccess?: (text: string) => void;
+  onCopyError?: (error: Error) => void;
+  ref?: React.Ref<HTMLElement>;
+};
 
-// Add new types for refs
+// ── CSS custom property defaults ─────────────────────────────────────────────
+
+const CSS_VAR_DEFAULTS: Record<string, string> = {
+  "--terminable-bg": "#1a1a1a",
+  "--terminable-prompt": "#00ff00",
+  "--terminable-output": "#ffffff",
+  "--terminable-titlebar-bg": "#333333",
+  "--terminable-border": "#555555",
+  "--terminable-dot-green": "#27c93f",
+  "--terminable-dot-yellow": "#ffbd2e",
+  "--terminable-dot-red": "#ff5f56",
+  "--terminable-title-color": "#cccccc",
+  "--terminable-hover-bg": "#333333",
+  "--terminable-cursor-color": "#00ff00",
+};
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
 type CommandProcessingState = {
   isProcessing: boolean;
   currentIndex: number;
 };
 
+function calculateTypingDelay(
+  baseSpeed: number,
+  randomFactor: number = 0,
+): number {
+  const randomVariation = Math.random() * (baseSpeed * (randomFactor / 100));
+  return Math.max(
+    10,
+    baseSpeed + (Math.random() > 0.5 ? randomVariation : -randomVariation),
+  );
+}
+
+function abortableDelay(ms: number, signal: AbortSignal): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    if (signal.aborted) {
+      reject(new DOMException("Aborted", "AbortError"));
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      signal.removeEventListener("abort", onAbort);
+      resolve();
+    }, ms);
+
+    function onAbort() {
+      clearTimeout(timer);
+      reject(new DOMException("Aborted", "AbortError"));
+    }
+
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
+}
+
+async function copyToClipboard(text: string): Promise<void> {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  // Fallback for non-HTTPS contexts
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "-9999px";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  try {
+    const ok = document.execCommand("copy");
+    if (!ok) throw new Error("execCommand('copy') returned false");
+  } finally {
+    document.body.removeChild(textarea);
+  }
+}
+
+// ── Title bar sub-components ─────────────────────────────────────────────────
+
+function MacOSDots() {
+  return (
+    <div className="flex items-center gap-2">
+      <div
+        className="h-3 w-3 rounded-full"
+        style={{ backgroundColor: "var(--terminable-dot-green)" }}
+      />
+      <div
+        className="h-3 w-3 rounded-full"
+        style={{ backgroundColor: "var(--terminable-dot-yellow)" }}
+      />
+      <div
+        className="h-3 w-3 rounded-full"
+        style={{ backgroundColor: "var(--terminable-dot-red)" }}
+      />
+    </div>
+  );
+}
+
+function WindowsButtons() {
+  const btnBase: React.CSSProperties = {
+    width: "12px",
+    height: "12px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "10px",
+    lineHeight: 1,
+    color: "var(--terminable-title-color)",
+    borderRadius: "2px",
+  };
+
+  return (
+    <div className="flex items-center gap-1">
+      <div style={btnBase}>─</div>
+      <div style={btnBase}>□</div>
+      <div style={btnBase}>✕</div>
+    </div>
+  );
+}
+
+function LinuxButton() {
+  return (
+    <div className="flex items-center">
+      <div
+        className="h-3 w-3 rounded-full"
+        style={{ backgroundColor: "var(--terminable-dot-red)" }}
+      />
+    </div>
+  );
+}
+
+// ── Main component ───────────────────────────────────────────────────────────
+
 export default function Terminable({
   commands = [],
   defaultTypingSpeed = 50,
+  defaultTypingRandom = 0,
   defaultOutputSpeed = 30,
   width = "w-full max-w-[800px]",
   height = "min-h-[300px] max-h-[500px]",
   termPrompt = "$ ",
   startLine = "",
-  backgroundColor = "bg-[#1a1a1a]",
-  promptColor = "text-[#00ff00]",
-  outputColor = "text-white",
-  greenMenu,
-  yellowMenu,
-  redMenu,
+  backgroundColor,
+  promptColor,
+  outputColor,
   title,
   commandDelay = 1000,
   allowCopy = true,
   start = true,
+  titleBarVariant = "macos",
+  onError,
+  onCopySuccess,
+  onCopyError,
+  ref,
 }: TerminableProps) {
   const [display, setDisplay] = useState<DisplayEntry[]>([
     { type: "output", content: startLine },
   ]);
 
-  // Remove the isProcessing state and rely only on processingStateRef
   const processingStateRef = useRef<CommandProcessingState>({
     isProcessing: false,
     currentIndex: 0,
   });
 
+  const abortRef = useRef<AbortController | null>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const userScrolledRef = useRef<boolean>(false);
 
-  // Calculate typing delay with useMemo
-  const calculateTypingDelay = useMemo(() => {
-    return (baseSpeed: number, randomFactor: number = 0) => {
-      const randomVariation = Math.random() * (baseSpeed * (randomFactor / 100));
-      return Math.max(10, baseSpeed + (Math.random() > 0.5 ? randomVariation : -randomVariation));
-    };
-  }, []);
+  const prefersReducedMotion = useMemo(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    [],
+  );
 
-  // Auto-scroll logic
+  // ── CSS custom properties ────────────────────────────────────────────────
+
+  // Build CSS custom properties — use Record<string, string> to allow
+  // arbitrary --terminable-* keys that React.CSSProperties doesn't know about.
+  const cssVars = { ...CSS_VAR_DEFAULTS } as Record<string, string>;
+  if (backgroundColor) cssVars["--terminable-bg"] = backgroundColor;
+  if (promptColor) cssVars["--terminable-prompt"] = promptColor;
+  if (outputColor) cssVars["--terminable-output"] = outputColor;
+
+  // ── Auto-scroll ──────────────────────────────────────────────────────────
+
   useEffect(() => {
     if (terminalRef.current && !userScrolledRef.current) {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
@@ -108,33 +253,36 @@ export default function Terminable({
 
   const handleScroll = useCallback(() => {
     if (!terminalRef.current) return;
-
     const { scrollTop, scrollHeight, clientHeight } = terminalRef.current;
-    const isScrolledToBottom = scrollHeight - scrollTop === clientHeight;
-
-    if (!isScrolledToBottom) {
-      userScrolledRef.current = true;
-    } else {
-      userScrolledRef.current = false;
-    }
+    userScrolledRef.current = scrollHeight - scrollTop !== clientHeight;
   }, []);
 
-  // Separate command processing logic
+  // ── Command output processing ────────────────────────────────────────────
+
   const processCommandOutput = useCallback(
     async (
-      output: string | React.ReactNode | OutputContent | Array<string | React.ReactNode | OutputContent>,
+      output:
+        | string
+        | React.ReactNode
+        | OutputContent
+        | Array<string | React.ReactNode | OutputContent>,
       defaultSpeed: number,
+      signal: AbortSignal,
       onBeforeOutput?: () => void,
     ) => {
       const outputs = Array.isArray(output) ? output : [output];
 
       for (const line of outputs) {
+        if (signal.aborted) return;
         if (!line) continue;
 
-        await new Promise((resolve) => setTimeout(resolve, defaultSpeed));
+        await abortableDelay(defaultSpeed, signal);
 
-        // Handle ReactNode directly
-        if (typeof line !== 'string' && !(line && typeof line === 'object' && 'content' in line)) {
+        // ReactNode directly (not string, not OutputContent)
+        if (
+          typeof line !== "string" &&
+          !(typeof line === "object" && line !== null && "content" in line)
+        ) {
           onBeforeOutput?.();
           setDisplay((prev) => [...prev, { type: "output", content: line }]);
           continue;
@@ -146,7 +294,7 @@ export default function Terminable({
           continue;
         }
 
-        // Handle OutputContent
+        // OutputContent
         onBeforeOutput?.();
         setDisplay((prev) => [
           ...prev,
@@ -154,7 +302,7 @@ export default function Terminable({
         ]);
 
         if (line.delay) {
-          await new Promise((resolve) => setTimeout(resolve, line.delay));
+          await abortableDelay(line.delay, signal);
         }
 
         setDisplay((prev) => {
@@ -170,56 +318,81 @@ export default function Terminable({
     [],
   );
 
+  // ── Single command processing ────────────────────────────────────────────
+
   const processCommand = useCallback(
-    async (cmd: CommandEntry) => {
+    async (cmd: CommandEntry, signal: AbortSignal) => {
       if (processingStateRef.current.isProcessing) return;
-      
+
       try {
         processingStateRef.current.isProcessing = true;
-        
+
         if (processingStateRef.current.currentIndex > 0) {
-          await new Promise((resolve) => setTimeout(resolve, cmd.delay ?? commandDelay));
+          await abortableDelay(cmd.delay ?? commandDelay, signal);
         }
 
-        // Helper function to type a single prompt
+        // Type a single prompt
         const typePrompt = async (prompt: string | React.ReactNode) => {
-          // Add command prompt
-          setDisplay((prev) => [...prev, { type: "command", content: "", done: false }]);
+          setDisplay((prev) => [
+            ...prev,
+            { type: "command", content: "", done: false },
+          ]);
 
           if (typeof prompt !== "string") {
             setDisplay((prev) => {
               const lastEntry = prev[prev.length - 1];
               if (lastEntry?.type === "command") {
-                return [...prev.slice(0, -1), { ...lastEntry, content: prompt, done: true }];
+                return [
+                  ...prev.slice(0, -1),
+                  { ...lastEntry, content: prompt, done: true },
+                ];
               }
               return prev;
             });
             return;
           }
 
-          // Type the command
           const trimmedPrompt = prompt.trim();
-          let currentContent = "";
-          
-          for (const char of trimmedPrompt) {
-            const delay = calculateTypingDelay(
-              cmd.typingSpeed ?? defaultTypingSpeed,
-              cmd.typingRandom
-            );
-            
-            await new Promise((resolve) => setTimeout(resolve, delay));
-            currentContent += char;
-            
+
+          if (prefersReducedMotion) {
             setDisplay((prev) => {
               const lastEntry = prev[prev.length - 1];
               if (lastEntry?.type === "command") {
-                return [...prev.slice(0, -1), { ...lastEntry, content: currentContent }];
+                return [
+                  ...prev.slice(0, -1),
+                  { ...lastEntry, content: trimmedPrompt, done: true },
+                ];
+              }
+              return prev;
+            });
+            return;
+          }
+
+          let currentContent = "";
+
+          for (const char of trimmedPrompt) {
+            if (signal.aborted) return;
+            const delay = calculateTypingDelay(
+              cmd.typingSpeed ?? defaultTypingSpeed,
+              cmd.typingRandom ?? defaultTypingRandom,
+            );
+
+            await abortableDelay(delay, signal);
+            currentContent += char;
+
+            setDisplay((prev) => {
+              const lastEntry = prev[prev.length - 1];
+              if (lastEntry?.type === "command") {
+                return [
+                  ...prev.slice(0, -1),
+                  { ...lastEntry, content: currentContent },
+                ];
               }
               return prev;
             });
           }
 
-          // Mark command as done
+          // Mark done
           setDisplay((prev) => {
             const lastEntry = prev[prev.length - 1];
             if (lastEntry?.type === "command") {
@@ -229,10 +402,11 @@ export default function Terminable({
           });
         };
 
-        // Process all prompts
+        // Process prompts
         if (Array.isArray(cmd.prompt)) {
-          for (const prompt of cmd.prompt) {
-            await typePrompt(prompt);
+          for (const p of cmd.prompt) {
+            if (signal.aborted) return;
+            await typePrompt(p);
           }
         } else {
           await typePrompt(cmd.prompt);
@@ -241,81 +415,178 @@ export default function Terminable({
         // Process outputs
         if (cmd.output) {
           if (cmd.outputDelay) {
-            await new Promise((resolve) => setTimeout(resolve, cmd.outputDelay));
+            await abortableDelay(cmd.outputDelay, signal);
           }
-          await processCommandOutput(cmd.output, defaultOutputSpeed, cmd.onBeforeOutput);
+          await processCommandOutput(
+            cmd.output,
+            defaultOutputSpeed,
+            signal,
+            cmd.onBeforeOutput,
+          );
         }
 
         cmd.onDone?.();
         processingStateRef.current.currentIndex += 1;
-      } catch (error) {
-        console.error('Error processing command:', error);
-        toast.error(error instanceof Error ? error.message : 'Unknown error', { duration: 3000 });
+      } catch (error: unknown) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          // Silently ignore aborts
+          return;
+        }
+        const err =
+          error instanceof Error ? error : new Error(String(error));
+        onError?.(err);
       } finally {
         processingStateRef.current.isProcessing = false;
       }
     },
-    [commandDelay, defaultOutputSpeed, defaultTypingSpeed, calculateTypingDelay, processCommandOutput]
+    [
+      commandDelay,
+      defaultOutputSpeed,
+      defaultTypingSpeed,
+      defaultTypingRandom,
+      onError,
+      prefersReducedMotion,
+      processCommandOutput,
+    ],
   );
 
-  useEffect(() => {
-    if (start) {
-      const processCommands = async () => {
-        try {
-          while (processingStateRef.current.currentIndex < commands.length) {
-            const cmd = commands[processingStateRef.current.currentIndex];
-            if (cmd) {
-              await processCommand(cmd);
-            } else {
-              processingStateRef.current.currentIndex++;
-            }
-          }
-        } catch (error) {
-          console.error('Error processing commands:', error);
-          toast.error(`Error processing commands: ${error instanceof Error ? error.message : 'Unknown error'}`, { duration: 2000 });
-        }
-      };
-      void processCommands();
-    }
-    
-    return () => {
-      processingStateRef.current.isProcessing = false;
-    };
-  }, [start, commands, processCommand]);
+  // ── Main processing loop ─────────────────────────────────────────────────
 
-  return (
-    <div
-      className={`mx-auto my-1 ${width} overflow-hidden rounded-lg ${backgroundColor} font-mono`}
-    >
-      <div className="flex items-center bg-[#333] px-2">
-        <Menubar className="border-none bg-transparent shadow-none">
-          <MenubarMenu>
-            <MenubarTrigger className="p-0 hover:bg-transparent">
-              <div className="h-3 w-3 rounded-full bg-[#27c93f]" />
-            </MenubarTrigger>
-            <MenubarContent>{greenMenu && greenMenu}</MenubarContent>
-          </MenubarMenu>
-          <MenubarMenu>
-            <MenubarTrigger className="p-0 hover:bg-transparent">
-              <div className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
-            </MenubarTrigger>
-            <MenubarContent>{yellowMenu && yellowMenu}</MenubarContent>
-          </MenubarMenu>
-          <MenubarMenu>
-            <MenubarTrigger className="p-0 hover:bg-transparent">
-              <div className="h-3 w-3 rounded-full bg-[#ff5f56]" />
-            </MenubarTrigger>
-            <MenubarContent>{redMenu && redMenu}</MenubarContent>
-          </MenubarMenu>{" "}
-        </Menubar>
-        <div className="flex-1 text-center text-sm">
+  useEffect(() => {
+    if (!start) {
+      // Abort any running processing when start becomes false
+      abortRef.current?.abort();
+      return;
+    }
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+    const { signal } = controller;
+
+    // Reset processing state for fresh start
+    processingStateRef.current = { isProcessing: false, currentIndex: 0 };
+
+    const run = async () => {
+      // Reset display at the start of the async processing loop
+      setDisplay([{ type: "output", content: startLine }]);
+
+      try {
+        while (
+          processingStateRef.current.currentIndex < commands.length &&
+          !signal.aborted
+        ) {
+          const cmd = commands[processingStateRef.current.currentIndex];
+          if (cmd) {
+            await processCommand(cmd, signal);
+          } else {
+            processingStateRef.current.currentIndex++;
+          }
+        }
+      } catch (error: unknown) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        const err =
+          error instanceof Error ? error : new Error(String(error));
+        onError?.(err);
+      }
+    };
+
+    void run();
+
+    return () => {
+      controller.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- startLine is captured on mount; commands identity triggers re-run correctly
+  }, [start, commands]);
+
+  // ── Clipboard handler ────────────────────────────────────────────────────
+
+  const handleCommandClick = useCallback(
+    (entry: DisplayEntry) => {
+      if (!allowCopy || !entry.done || typeof entry.content !== "string") {
+        return;
+      }
+
+      const cmd = commands[processingStateRef.current.currentIndex];
+      cmd?.onCopy?.();
+
+      copyToClipboard(entry.content)
+        .then(() => {
+          onCopySuccess?.(entry.content as string);
+        })
+        .catch((error: unknown) => {
+          const err =
+            error instanceof Error ? error : new Error(String(error));
+          onCopyError?.(err);
+        });
+    },
+    [allowCopy, commands, onCopySuccess, onCopyError],
+  );
+
+  const handleCommandKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLSpanElement>, entry: DisplayEntry) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleCommandClick(entry);
+      }
+    },
+    [handleCommandClick],
+  );
+
+  // ── Title bar rendering ──────────────────────────────────────────────────
+
+  const renderTitleBar = () => {
+    if (titleBarVariant === "none") return null;
+
+    const titleBarContent = (
+      <div
+        className="flex items-center px-2"
+        style={{
+          backgroundColor: "var(--terminable-titlebar-bg)",
+          height: "28px",
+        }}
+      >
+        {titleBarVariant === "macos" && <MacOSDots />}
+        {titleBarVariant === "windows" && <WindowsButtons />}
+        {titleBarVariant === "linux" && <LinuxButton />}
+        <div
+          className="flex-1 text-center text-sm"
+          style={{ color: "var(--terminable-title-color)" }}
+        >
           {title}
         </div>
+        {/* Spacer to balance the title when buttons are on left */}
+        {(titleBarVariant === "macos" ||
+          titleBarVariant === "windows" ||
+          titleBarVariant === "linux") && (
+          <div style={{ width: titleBarVariant === "macos" ? "52px" : "40px" }} />
+        )}
       </div>
+    );
+
+    return titleBarContent;
+  };
+
+  // ── Render ───────────────────────────────────────────────────────────────
+
+  return (
+    <section
+      ref={ref}
+      role="region"
+      aria-roledescription="terminal"
+      aria-label="Terminal simulator"
+      className={`mx-auto my-1 ${width} overflow-hidden rounded-lg font-mono`}
+      style={{
+        ...cssVars,
+        backgroundColor: "var(--terminable-bg)",
+        border: `1px solid var(--terminable-border)`,
+      }}
+    >
+      {renderTitleBar()}
       <div
         ref={terminalRef}
         onScroll={handleScroll}
-        className={`${height} overflow-y-auto p-5 ${promptColor} whitespace-pre-wrap break-words`}
+        className={`${height} overflow-y-auto p-5 whitespace-pre-wrap break-words`}
+        style={{ color: "var(--terminable-prompt)" }}
         role="log"
         aria-live="polite"
       >
@@ -323,24 +594,50 @@ export default function Terminable({
           <div key={`${index}-${entry.type}`} className="my-1">
             {entry.type === "command" && (
               <div className="flex">
-                <span className={`mr-2 ${promptColor}`}>{termPrompt}</span>
                 <span
-                  className={`${!entry.done ? "animate-blink border-r-2 border-[#00ff00]" : ""} cursor-pointer break-all rounded px-1 hover:bg-[#333]`}
-                  onClick={() => {
-                    const cmd = commands[processingStateRef.current.currentIndex];
-                    if (allowCopy && entry.done && typeof entry.content === "string" && cmd) {
-                      cmd.onCopy?.();
-                      navigator.clipboard.writeText(entry.content).then(() => {
-                        toast.success("Copied to clipboard", {
-                          duration: 1000,
-                        });
-                      }).catch((error) => {
-                        console.error("Failed to copy to clipboard:", error);
-                        toast.error("Failed to copy to clipboard", {
-                          duration: 1000,
-                        });
-                      });
-                    }
+                  className="mr-2"
+                  style={{ color: "var(--terminable-prompt)" }}
+                >
+                  {termPrompt}
+                </span>
+                <span
+                  className={`cursor-pointer break-all rounded px-1 ${
+                    !entry.done
+                      ? "animate-blink border-r-2"
+                      : ""
+                  }${
+                    allowCopy && entry.done && typeof entry.content === "string"
+                      ? " focus:outline focus:outline-2 focus:outline-[var(--terminable-cursor-color)]"
+                      : ""
+                  }`}
+                  style={{
+                    borderColor: !entry.done
+                      ? "var(--terminable-cursor-color)"
+                      : undefined,
+                  }}
+                  onClick={() => handleCommandClick(entry)}
+                  onKeyDown={
+                    allowCopy && entry.done && typeof entry.content === "string"
+                      ? (e) => handleCommandKeyDown(e, entry)
+                      : undefined
+                  }
+                  tabIndex={
+                    allowCopy && entry.done && typeof entry.content === "string"
+                      ? 0
+                      : undefined
+                  }
+                  aria-label={
+                    allowCopy && entry.done && typeof entry.content === "string"
+                      ? `Click to copy: ${entry.content}`
+                      : undefined
+                  }
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.backgroundColor =
+                      "var(--terminable-hover-bg)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.backgroundColor =
+                      "";
                   }}
                 >
                   {entry.content}
@@ -349,8 +646,8 @@ export default function Terminable({
             )}
             {entry.type === "output" && (
               <div
-                key={`${index}__`}
-                className={`ml-6 whitespace-pre-wrap break-all ${outputColor}`}
+                className="ml-6 whitespace-pre-wrap break-all"
+                style={{ color: "var(--terminable-output)" }}
               >
                 {entry.content}
               </div>
@@ -358,6 +655,6 @@ export default function Terminable({
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
-} 
+}
