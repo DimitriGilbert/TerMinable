@@ -11,7 +11,7 @@ type ThemeContextType = {
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
-export function ThemeProvider({ children, className }: { children: React.ReactNode, className?: string }) {
+export function ThemeProvider({ children }: { children: React.ReactNode; className?: string }) {
   const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function ThemeProvider({ children, className }: { children: React.ReactNo
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <div className={className}>{children}</div>
+      {children}
     </ThemeContext.Provider>
   );
 }
