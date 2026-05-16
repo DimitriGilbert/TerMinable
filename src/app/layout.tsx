@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <ThemeProvider>
-          <nav className="fixed left-0 right-0 top-0 z-50 border-b border-border/50 bg-background/80 p-4 backdrop-blur-md">
+          <nav className="fixed left-0 right-0 top-0 z-50 border-b border-border/50 bg-background/80 px-4 py-2 backdrop-blur-md">
             <div className="mx-auto max-w-7xl">
               <NavigationMenu>
                 <NavigationMenuList className="flex justify-center">
@@ -53,7 +53,7 @@ export default function RootLayout({
               </NavigationMenu>
             </div>
           </nav>
-          <div className="pt-14">
+          <div className="pt-10">
             {children}
             <footer className="border-t border-border/50 p-4 pb-8 pt-8">
               <div className="mx-auto max-w-7xl">
