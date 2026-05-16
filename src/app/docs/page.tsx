@@ -3,7 +3,6 @@ import { DocsSection } from "~/components/docs/DocsSection";
 import { DocsCodeBlock } from "~/components/docs/DocsCodeBlock";
 import { DocsTable } from "~/components/docs/DocsTable";
 import TerminableExample from "~/components/TerminableExample";
-import { toast } from "sonner";
 import { useInView } from "react-intersection-observer";
 import { type TerminableExampleProps } from "~/components/TerminableExample";
 import { GlowLink } from "~/components/ui/glow-link";
@@ -112,7 +111,40 @@ export default function Docs() {
                 "-",
                 "An array of command objects to be executed in the terminal.",
               ],
-              // Add other rows here
+              [
+                <code key="titleBarVariant" className="text-primary">
+                  titleBarVariant
+                </code>,
+                <code key="titleBarVariant0">
+                  {"\"macos\" | \"windows\" | \"linux\" | \"minimal\" | \"none\""}
+                </code>,
+                <code key="titleBarVariant1">{"\"macos\""}</code>,
+                "Visual style of the terminal title bar.",
+              ],
+              [
+                <code key="onError" className="text-primary">
+                  onError
+                </code>,
+                <code key="onError0">(error: Error) =&gt; void</code>,
+                "-",
+                "Callback fired when an error occurs during command processing.",
+              ],
+              [
+                <code key="onCopySuccess" className="text-primary">
+                  onCopySuccess
+                </code>,
+                <code key="onCopySuccess0">(text: string) =&gt; void</code>,
+                "-",
+                "Callback fired when a command is successfully copied to clipboard.",
+              ],
+              [
+                <code key="onCopyError" className="text-primary">
+                  onCopyError
+                </code>,
+                <code key="onCopyError0">(error: Error) =&gt; void</code>,
+                "-",
+                "Callback fired when copying to clipboard fails.",
+              ],
             ]}
           />
         </DocsSection>
@@ -447,18 +479,19 @@ export default function Docs() {
               commands={[
                 {
                   prompt: "onDone callback",
-                  output: "This will trigger a toast",
-                  onDone: () => toast.success("Command finished!"),
+                  output: "This command triggers onDone when finished",
                 },
                 {
                   prompt: "onCopy callback",
-                  output: "Click to copy this command",
-                  onCopy: () => toast.info("Command copied!"),
+                  output: "Click this command to copy it",
                 },
                 {
                   prompt: "onBeforeOutput callback",
-                  output: "This shows a toast before output",
-                  onBeforeOutput: () => toast.warning("About to show output!"),
+                  output: {
+                    content: "Output shown after onBeforeOutput fires",
+                    delay: 1500,
+                    placeholder: "Preparing output...",
+                  },
                 },
               ]}
               codeString={`
@@ -466,18 +499,22 @@ export default function Docs() {
   commands={[
     {
       prompt: "onDone callback",
-      output: "This will trigger a toast",
-      onDone: () => toast.success("Command finished!")
+      output: "This command triggers onDone when finished",
+      onDone: () => console.log("Done!")
     },
     {
       prompt: "onCopy callback",
-      output: "Click to copy this command",
-      onCopy: () => toast.info("Command copied!")
+      output: "Click this command to copy it",
+      onCopy: () => console.log("Copied!")
     },
     {
       prompt: "onBeforeOutput callback",
-      output: "This shows a toast before output",
-      onBeforeOutput: () => toast.warning("About to show output!")
+      output: {
+        content: "Output shown after onBeforeOutput fires",
+        delay: 1500,
+        placeholder: "Preparing output..."
+      },
+      onBeforeOutput: () => console.log("Before output!")
     }
   ]}
 />
@@ -569,7 +606,9 @@ export default function Docs() {
                 {
                   prompt: "Running diagnostics...",
                   output: ["CPU: OK", "Memory: OK", "Storage: OK"],
-                  onDone: () => toast.success("Diagnostics complete!"),
+                  onDone: () => {
+                    return;
+                  },
                 },
                 {
                   prompt: "System ready",
@@ -603,7 +642,7 @@ export default function Docs() {
         "Memory: OK",
         "Storage: OK"
       ],
-      onDone: () => toast.success("Diagnostics complete!")
+      onDone: () => { /* handle completion */ }
     },
     {
       prompt: "System ready",

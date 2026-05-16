@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Copy } from "lucide-react";
 
@@ -30,11 +29,8 @@ export function PkgMngCmdCopy({
   const handleCopy = () => {
     navigator.clipboard
       .writeText(selectedManager?.command ?? "")
-      .then(() => {
-        toast.success("Copied to clipboard!");
-      })
       .catch(() => {
-        toast.error("Failed to copy to clipboard!");
+        /* silent failure */
       });
   };
 

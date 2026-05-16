@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import Terminable from "~registry/components/ui/Terminable";
 import { GlowLink } from "~/components/ui/glow-link";
@@ -102,9 +101,6 @@ export default function HomePage() {
         prompt: "You can also have a callback",
         output: "when the command is done",
         onDone: () => {
-          toast.info("Check the title !", {
-            duration: 5000,
-          });
           setTermTitle("Terminable is awesome !");
         },
       },
@@ -166,9 +162,6 @@ export default function HomePage() {
       {
         prompt: "You can have callback Before the output",
         onBeforeOutput: () => {
-          toast.success("Before the output !", {
-            duration: 5000,
-          });
           setTermTitle(
             <div className="text-yellow-500">
               Before the output !
@@ -249,6 +242,7 @@ export default function HomePage() {
         termPrompt={TermPrompt}
         startLine={""}
         commands={commands}
+        titleBarVariant="macos"
       />
     </main>
   );
