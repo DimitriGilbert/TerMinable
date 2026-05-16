@@ -204,8 +204,8 @@ export default function HomePage() {
   );
 
   return (
-    <main className="flex min-h-[100vh] items-center pt-16">
-      <div className="grid w-full grid-cols-1 items-center gap-6 px-6 lg:grid-cols-[45fr_55fr] lg:gap-10 lg:px-12">
+    <main className="pt-16">
+      <div className="grid w-full grid-cols-1 items-start gap-6 px-6 py-4 lg:grid-cols-[45fr_55fr] lg:gap-10 lg:px-12 lg:py-6">
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
           <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl">
             TerMinable
