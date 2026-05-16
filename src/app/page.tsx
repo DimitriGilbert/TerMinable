@@ -10,9 +10,9 @@ export default function HomePage() {
   const [TermTitle, setTermTitle] = useState<string | React.ReactNode>(
     "Terminable",
   );
-  const [TermBackground, setTermBackground] = useState("bg-[#1a1a1a]");
-  const [TermPromptColor, setTermPromptColor] = useState("text-[#00ff00]");
-  const [TermOutputColor, setTermOutputColor] = useState("text-white");
+  const [TermBackground, setTermBackground] = useState("#1a1b26");
+  const [TermPromptColor, setTermPromptColor] = useState("#73daca");
+  const [TermOutputColor, setTermOutputColor] = useState("#c0caf5");
   const [TermPrompt, setTermPrompt] = useState("$ ");
 
   const commands = useMemo(
@@ -55,7 +55,7 @@ export default function HomePage() {
             <img
               className="h-12 w-auto"
               src="https://gifdb.com/images/high/animated-energetic-dancing-banana-a0if4xeqivxs5jdy.gif"
-              alt="logo"
+              alt="dancing banana"
             />
           ),
         },
@@ -69,10 +69,12 @@ export default function HomePage() {
               I did it to use on many of my project docs, <br />
               <Link
                 href="https://butt3r.dev"
-                className="text-blue-500"
+                className="text-blue-400"
                 target="_blank"
               >
-                <Button className="bg-blue-500 text-white">Butt3r.dev</Button>
+                <Button variant="outline" className="mt-2">
+                  Butt3r.dev
+                </Button>
               </Link>
             </div>
           ),
@@ -84,7 +86,7 @@ export default function HomePage() {
         output: {
           content: [
             "What more can I give you ?",
-            <div className="text-blue-500" key="thinking-content">
+            <div className="text-blue-400" key="thinking-content">
               Thinking...
             </div>,
           ],
@@ -105,32 +107,32 @@ export default function HomePage() {
         },
       },
       {
-        prompt: "Don't like green on black",
+        prompt: "Don't like the default palette",
         output: {
           content: [
-            "but you can set the background, prompt and output colors\n",
+            "you can change background, prompt and output colors\n",
             "as well as the prompt line start and the title",
           ],
-          placeholder: "...I could not see why",
+          placeholder: "...let me show you",
           delay: 2000,
         },
         onDone: () => {
-          setTermBackground("bg-blue-800");
-          setTermPromptColor("text-[#ff0000]");
-          setTermOutputColor("text-[#00ff00]");
+          setTermBackground("#1e1e3f");
+          setTermPromptColor("#f7768e");
+          setTermOutputColor("#9ece6a");
           setTermPrompt("🔴 ");
           setTermTitle("Terminable is awesomeR !");
         },
       },
       {
-        prompt: "Seeeee, green on black is not THAAAT bad :D",
+        prompt: "Seeeee, the Tokyo Night palette is nicer though :D",
         output: "what do you mean it was a poor choice of colors...",
         onDone: () => {
-          setTermBackground("bg-[#1a1a1a]");
-          setTermPromptColor("text-[#00ff00]");
-          setTermOutputColor("text-white");
+          setTermBackground("#1a1b26");
+          setTermPromptColor("#73daca");
+          setTermOutputColor("#c0caf5");
           setTermPrompt("$ ");
-          setTermTitle("Terminable is awesomeR !");
+          setTermTitle("Terminable");
         },
       },
       {
@@ -143,16 +145,16 @@ export default function HomePage() {
       },
       {
         prompt: (
-          <div className="text-justify text-yellow-500">
-            Both <span className="text-[#00ff00]">prompt</span> and{" "}
-            <span className="text-white">output</span> can be react nodes !
+          <div className="text-justify text-yellow-400">
+            Both <span className="text-green-400">prompt</span> and{" "}
+            <span className="text-blue-300">output</span> can be react nodes !
           </div>
         ),
         output: [
           "Oooorrr",
           {
             content: (
-              <div className="text-justify font-bold text-blue-500">
+              <div className="text-justify font-bold text-blue-400">
                 An array of react nodes !
               </div>
             ),
@@ -163,11 +165,11 @@ export default function HomePage() {
         prompt: "You can have callback Before the output",
         onBeforeOutput: () => {
           setTermTitle(
-            <div className="text-yellow-500">
+            <div className="text-yellow-400">
               Before the output !
               <img
                 src="https://gifdb.com/images/high/animated-energetic-dancing-banana-a0if4xeqivxs5jdy.gif"
-                alt="logo"
+                alt="dancing banana"
               />
             </div>,
           );
@@ -188,10 +190,10 @@ export default function HomePage() {
           content: (
             <div className="flex flex-row gap-2">
               <Link href="/docs">
-                <Button className="bg-violet-500 text-white">Docs</Button>
+                <Button variant="outline">Docs</Button>
               </Link>
               <Link href="https://github.com/your-repo" target="_blank">
-                <Button className="bg-orange-500 text-white">Repo</Button>
+                <Button variant="outline">Repo</Button>
               </Link>
             </div>
           ),
@@ -204,13 +206,13 @@ export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+        <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-[5rem]">
           TerMinable
         </h1>
-        <h2 className="text-2xl font-bold tracking-tight text-white sm:text-[2rem]">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-[2rem]">
           A Minable Terminal for your docs
         </h2>
-        <h3 className="text-xl font-bold tracking-tight text-white sm:text-[1.5rem]">
+        <h3 className="text-xl font-bold tracking-tight text-foreground sm:text-[1.5rem]">
           As a{" "}
           <GlowLink
             href="https://ui.shadcn.com/"
@@ -230,7 +232,7 @@ export default function HomePage() {
           className="w-full max-w-2xl"
           buttonClassName="px-6 py-3"
           preClassName="w-full"
-          cmd={`shadcn/ui@latest add https://DimitriGilbert.github.io/TerMinable/r/terminable.json`}
+          cmd={`shadcn@latest add https://DimitriGilbert.github.io/TerMinable/r/terminable.json`}
         />
       </div>
 

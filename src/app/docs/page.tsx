@@ -25,13 +25,13 @@ const LazyTerminableExample = (props: TerminableExampleProps) => {
 export default function Docs() {
   return (
     <div className="min-h-screen py-12">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto max-w-5xl px-4">
         <header className="mb-8 text-center">
           <h1 className="mb-2 text-4xl font-bold text-foreground">
             <span className="text-primary">Terminable</span> Component
             Documentation
           </h1>
-          <p className="text-foreground/80">
+          <p className="text-muted-foreground">
             Simulate terminal interactions in your documentation
           </p>
         </header>
@@ -46,7 +46,7 @@ export default function Docs() {
             is for you.
           </p>
           <p className="mb-4">
-            It is build using{" "}
+            It is built using{" "}
             <GlowLink
               href="https://ui.shadcn.com/"
               target="_blank"
@@ -82,7 +82,7 @@ export default function Docs() {
             className="w-full max-w-3xl"
             buttonClassName="px-4 py-2"
             preClassName="w-full"
-            cmd={`shadcn/ui@latest add https://DimitriGilbert.github.io/TerMinable/r/terminable.json`}
+            cmd={`shadcn@latest add https://DimitriGilbert.github.io/TerMinable/r/terminable.json`}
           />
         </DocsSection>
 
@@ -92,14 +92,21 @@ export default function Docs() {
             <code className="rounded bg-muted px-1 py-0.5 font-mono text-primary">
               Terminable
             </code>{" "}
-            component into your project...
+            component into your project:
           </p>
           <DocsCodeBlock>
-            {`import Terminable from "~registry/components/ui/Terminable";`}
+            {`import Terminable from "@/components/ui/Terminable";`}
           </DocsCodeBlock>
         </DocsSection>
 
         <DocsSection title="Props">
+          <p className="mb-4">
+            The{" "}
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-primary">
+              Terminable
+            </code>{" "}
+            component accepts the following props:
+          </p>
           <DocsTable
             headers={["Name", "Type", "Default", "Description"]}
             rows={[
@@ -108,7 +115,7 @@ export default function Docs() {
                   commands
                 </code>,
                 <code key="commands0">CommandEntry[]</code>,
-                "-",
+                <code key="commands1">required</code>,
                 "An array of command objects to be executed in the terminal.",
               ],
               [
@@ -116,17 +123,132 @@ export default function Docs() {
                   titleBarVariant
                 </code>,
                 <code key="titleBarVariant0">
-                  {"\"macos\" | \"windows\" | \"linux\" | \"minimal\" | \"none\""}
+                  &quot;macos&quot; | &quot;windows&quot; | &quot;linux&quot; |
+                  &quot;minimal&quot; | &quot;none&quot;
                 </code>,
-                <code key="titleBarVariant1">{"\"macos\""}</code>,
+                <code key="titleBarVariant1">&quot;macos&quot;</code>,
                 "Visual style of the terminal title bar.",
+              ],
+              [
+                <code key="title" className="text-primary">
+                  title
+                </code>,
+                <code key="title0">string | ReactNode</code>,
+                <code key="title1">-</code>,
+                "Title displayed in the title bar.",
+              ],
+              [
+                <code key="defaultTypingSpeed" className="text-primary">
+                  defaultTypingSpeed
+                </code>,
+                <code key="defaultTypingSpeed0">number</code>,
+                <code key="defaultTypingSpeed1">50</code>,
+                "Default typing speed in ms per character.",
+              ],
+              [
+                <code key="defaultTypingRandom" className="text-primary">
+                  defaultTypingRandom
+                </code>,
+                <code key="defaultTypingRandom0">number</code>,
+                <code key="defaultTypingRandom1">0</code>,
+                "Randomness factor for typing speed (0–100).",
+              ],
+              [
+                <code key="defaultOutputSpeed" className="text-primary">
+                  defaultOutputSpeed
+                </code>,
+                <code key="defaultOutputSpeed0">number</code>,
+                <code key="defaultOutputSpeed1">30</code>,
+                "Delay between output lines in ms.",
+              ],
+              [
+                <code key="width" className="text-primary">
+                  width
+                </code>,
+                <code key="width0">string</code>,
+                <code key="width1">&quot;w-full max-w-[800px]&quot;</code>,
+                "Tailwind width classes for the terminal container.",
+              ],
+              [
+                <code key="height" className="text-primary">
+                  height
+                </code>,
+                <code key="height0">string</code>,
+                <code key="height1">
+                  &quot;min-h-[300px] max-h-[500px]&quot;
+                </code>,
+                "Tailwind height classes for the terminal body.",
+              ],
+              [
+                <code key="termPrompt" className="text-primary">
+                  termPrompt
+                </code>,
+                <code key="termPrompt0">string | ReactNode</code>,
+                <code key="termPrompt1">&quot;$ &quot;</code>,
+                "Prompt symbol shown before each command.",
+              ],
+              [
+                <code key="startLine" className="text-primary">
+                  startLine
+                </code>,
+                <code key="startLine0">string | ReactNode</code>,
+                <code key="startLine1">&quot;&quot;</code>,
+                "Initial content displayed before commands start.",
+              ],
+              [
+                <code key="backgroundColor" className="text-primary">
+                  backgroundColor
+                </code>,
+                <code key="backgroundColor0">string</code>,
+                <code key="backgroundColor1">&quot;#1a1b26&quot;</code>,
+                "CSS color value for the terminal background. Overrides the default CSS var.",
+              ],
+              [
+                <code key="promptColor" className="text-primary">
+                  promptColor
+                </code>,
+                <code key="promptColor0">string</code>,
+                <code key="promptColor1">&quot;#73daca&quot;</code>,
+                "CSS color value for the prompt text. Overrides the default CSS var.",
+              ],
+              [
+                <code key="outputColor" className="text-primary">
+                  outputColor
+                </code>,
+                <code key="outputColor0">string</code>,
+                <code key="outputColor1">&quot;#c0caf5&quot;</code>,
+                "CSS color value for the output text. Overrides the default CSS var.",
+              ],
+              [
+                <code key="commandDelay" className="text-primary">
+                  commandDelay
+                </code>,
+                <code key="commandDelay0">number</code>,
+                <code key="commandDelay1">1000</code>,
+                "Default delay between commands in ms.",
+              ],
+              [
+                <code key="allowCopy" className="text-primary">
+                  allowCopy
+                </code>,
+                <code key="allowCopy0">boolean</code>,
+                <code key="allowCopy1">true</code>,
+                "Whether completed commands can be clicked to copy.",
+              ],
+              [
+                <code key="start" className="text-primary">
+                  start
+                </code>,
+                <code key="start0">boolean</code>,
+                <code key="start1">true</code>,
+                "Start processing commands automatically on mount.",
               ],
               [
                 <code key="onError" className="text-primary">
                   onError
                 </code>,
                 <code key="onError0">(error: Error) =&gt; void</code>,
-                "-",
+                <code key="onError1">-</code>,
                 "Callback fired when an error occurs during command processing.",
               ],
               [
@@ -134,7 +256,7 @@ export default function Docs() {
                   onCopySuccess
                 </code>,
                 <code key="onCopySuccess0">(text: string) =&gt; void</code>,
-                "-",
+                <code key="onCopySuccess1">-</code>,
                 "Callback fired when a command is successfully copied to clipboard.",
               ],
               [
@@ -142,7 +264,7 @@ export default function Docs() {
                   onCopyError
                 </code>,
                 <code key="onCopyError0">(error: Error) =&gt; void</code>,
-                "-",
+                <code key="onCopyError1">-</code>,
                 "Callback fired when copying to clipboard fails.",
               ],
             ]}
@@ -165,69 +287,69 @@ export default function Docs() {
                 <code key="prompt" className="text-primary">
                   prompt
                 </code>,
-                <code key="prompt0">string | ReactNode</code>,
-                "The command prompt string or ReactNode to be displayed.",
+                <code key="prompt0">
+                  string | ReactNode | Array&lt;string | ReactNode&gt;
+                </code>,
+                "The command prompt string or ReactNode to be typed.",
               ],
               [
                 <code key="output" className="text-primary">
                   output
                 </code>,
                 <code key="output0">
-                  string | OutputContent | Array&lt;string |
-                  OutputContent&gt;
+                  string | OutputContent | ReactNode | Array&lt;string |
+                  OutputContent | ReactNode&gt;
                 </code>,
-                `The output of the command. Can be a string, OutputContent
-                object, or an array of both."`,
+                "The output of the command. Can be a string, OutputContent object, ReactNode, or an array of these.",
               ],
               [
                 <code key="typingSpeed" className="text-primary">
                   typingSpeed
                 </code>,
                 <code key="typingSpeed0">number</code>,
-                `Typing speed for this command, overriding the default.`,
+                "Typing speed for this command in ms, overriding the default.",
               ],
               [
                 <code key="typingRandom" className="text-primary">
                   typingRandom
                 </code>,
                 <code key="typingRandom0">number</code>,
-                `Randomness factor for typing speed, overriding the default.`,
+                "Randomness factor for typing speed (0–100), overriding the default.",
               ],
               [
                 <code key="delay" className="text-primary">
                   delay
                 </code>,
                 <code key="delay0">number</code>,
-                `Delay before executing this command, overriding the global
-                delay.`,
+                "Delay before executing this command in ms, overriding the global commandDelay.",
               ],
               [
                 <code key="outputDelay" className="text-primary">
                   outputDelay
                 </code>,
                 <code key="outputDelay0">number</code>,
-                `Delay before displaying the output of this command.`,
+                "Delay before displaying the output of this command in ms.",
               ],
               [
                 <code key="onDone" className="text-primary">
                   onDone
                 </code>,
                 <code key="onDone0">() =&gt; void</code>,
-                `Callback function executed when the command is finished.`,
+                "Callback function executed when the command is finished.",
               ],
               [
                 <code key="onCopy" className="text-primary">
                   onCopy
                 </code>,
                 <code key="onCopy0">() =&gt; void</code>,
-                `Callback function executed when the command is copied.`,
+                "Callback function executed when the command text is copied.",
               ],
               [
                 <code key="onBeforeOutput" className="text-primary">
                   onBeforeOutput
                 </code>,
                 <code key="onBeforeOutput0">() =&gt; void</code>,
-                `Callback function executed before the output is displayed.`,
+                "Callback function executed before the output is displayed.",
               ],
             ]}
           />
@@ -268,6 +390,177 @@ export default function Docs() {
               ],
             ]}
           />
+        </DocsSection>
+
+        <DocsSection title="CSS Custom Properties">
+          <p className="mb-4">
+            The component uses CSS custom properties for theming. These are
+            defined with Tokyo Night defaults and can be overridden by passing
+            the corresponding props or by setting the CSS variables in your
+            stylesheet.
+          </p>
+          <DocsTable
+            headers={["Variable", "Default", "Purpose"]}
+            rows={[
+              [
+                <code key="0" className="text-primary">
+                  --terminable-bg
+                </code>,
+                <code key="0v">#1a1b26</code>,
+                "Terminal background color",
+              ],
+              [
+                <code key="1" className="text-primary">
+                  --terminable-prompt
+                </code>,
+                <code key="1v">#73daca</code>,
+                "Prompt text color",
+              ],
+              [
+                <code key="2" className="text-primary">
+                  --terminable-output
+                </code>,
+                <code key="2v">#c0caf5</code>,
+                "Output text color",
+              ],
+              [
+                <code key="3" className="text-primary">
+                  --terminable-titlebar-bg
+                </code>,
+                <code key="3v">#24283b</code>,
+                "Title bar background",
+              ],
+              [
+                <code key="4" className="text-primary">
+                  --terminable-border
+                </code>,
+                <code key="4v">#3b4261</code>,
+                "Terminal border color",
+              ],
+              [
+                <code key="5" className="text-primary">
+                  --terminable-title-color
+                </code>,
+                <code key="5v">#a9b1d6</code>,
+                "Title text color",
+              ],
+              [
+                <code key="6" className="text-primary">
+                  --terminable-hover-bg
+                </code>,
+                <code key="6v">#292e42</code>,
+                "Command hover background",
+              ],
+              [
+                <code key="7" className="text-primary">
+                  --terminable-cursor-color
+                </code>,
+                <code key="7v">#c0caf5</code>,
+                "Blinking cursor color",
+              ],
+              [
+                <code key="8" className="text-primary">
+                  --terminable-dot-green
+                </code>,
+                <code key="8v">#27c93f</code>,
+                "macOS title bar green dot",
+              ],
+              [
+                <code key="9" className="text-primary">
+                  --terminable-dot-yellow
+                </code>,
+                <code key="9v">#ffbd2e</code>,
+                "macOS title bar yellow dot",
+              ],
+              [
+                <code key="10" className="text-primary">
+                  --terminable-dot-red
+                </code>,
+                <code key="10v">#ff5f56</code>,
+                "macOS/Linux title bar red dot",
+              ],
+            ]}
+          />
+        </DocsSection>
+
+        <DocsSection title="Title Bar Variants">
+          <p className="mb-4">
+            The{" "}
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-primary">
+              titleBarVariant
+            </code>{" "}
+            prop controls the visual style of the title bar. Choose from five
+            options:
+          </p>
+
+          <div className="grid gap-8 md:grid-cols-2">
+            <LazyTerminableExample
+              title="macOS"
+              titleBarVariant="macos"
+              commands={[
+                { prompt: "echo 'macOS style'", output: "macOS style" },
+              ]}
+              codeString={`
+<Terminable
+  titleBarVariant="macos"
+  title="Terminal"
+  commands={[
+    { prompt: "echo 'macOS style'", output: "macOS style" }
+  ]}
+/>
+              `}
+            />
+
+            <LazyTerminableExample
+              title="Windows"
+              titleBarVariant="windows"
+              commands={[
+                { prompt: "echo 'Windows style'", output: "Windows style" },
+              ]}
+              codeString={`
+<Terminable
+  titleBarVariant="windows"
+  title="Command Prompt"
+  commands={[
+    { prompt: "echo 'Windows style'", output: "Windows style" }
+  ]}
+/>
+              `}
+            />
+
+            <LazyTerminableExample
+              title="Linux"
+              titleBarVariant="linux"
+              commands={[
+                { prompt: "echo 'Linux style'", output: "Linux style" },
+              ]}
+              codeString={`
+<Terminable
+  titleBarVariant="linux"
+  title="Bash"
+  commands={[
+    { prompt: "echo 'Linux style'", output: "Linux style" }
+  ]}
+/>
+              `}
+            />
+
+            <LazyTerminableExample
+              title="none"
+              titleBarVariant="none"
+              commands={[
+                { prompt: "echo 'No title bar'", output: "No title bar" },
+              ]}
+              codeString={`
+<Terminable
+  titleBarVariant="none"
+  commands={[
+    { prompt: "echo 'No title bar'", output: "No title bar" }
+  ]}
+/>
+              `}
+            />
+          </div>
         </DocsSection>
 
         <DocsSection title="Examples">
@@ -439,17 +732,17 @@ export default function Docs() {
               commands={[
                 {
                   prompt: (
-                    <span style={{ color: "yellow" }}>Custom prompt</span>
+                    <span style={{ color: "#e0af68" }}>Custom prompt</span>
                   ),
-                  output: <span style={{ color: "cyan" }}>Custom output</span>,
+                  output: <span style={{ color: "#7dcfff" }}>Custom output</span>,
                 },
                 {
                   prompt: "Multiple React nodes",
                   output: [
-                    <div style={{ color: "red" }} key="1">
+                    <div style={{ color: "#f7768e" }} key="1">
                       First node
                     </div>,
-                    <div style={{ color: "blue" }} key="2">
+                    <div style={{ color: "#7aa2f7" }} key="2">
                       Second node
                     </div>,
                   ],
@@ -459,14 +752,14 @@ export default function Docs() {
 <Terminable
   commands={[
     {
-      prompt: <span style={{ color: "yellow" }}>Custom prompt</span>,
-      output: <span style={{ color: "cyan" }}>Custom output</span>
+      prompt: <span style={{ color: "#e0af68" }}>Custom prompt</span>,
+      output: <span style={{ color: "#7dcfff" }}>Custom output</span>
     },
     {
       prompt: "Multiple React nodes",
       output: [
-        <div style={{ color: "red" }} key="1">First node</div>,
-        <div style={{ color: "blue" }} key="2">Second node</div>
+        <div style={{ color: "#f7768e" }} key="1">First node</div>,
+        <div style={{ color: "#7aa2f7" }} key="2">Second node</div>
       ]
     }
   ]}
@@ -516,6 +809,26 @@ export default function Docs() {
       },
       onBeforeOutput: () => console.log("Before output!")
     }
+  ]}
+/>
+              `}
+            />
+
+            <LazyTerminableExample
+              title="Custom Colors"
+              commands={[
+                {
+                  prompt: "echo 'custom palette'",
+                  output: "Background, prompt and output colors are customizable",
+                },
+              ]}
+              codeString={`
+<Terminable
+  backgroundColor="#1e1e3f"
+  promptColor="#f7768e"
+  outputColor="#9ece6a"
+  commands={[
+    { prompt: "echo 'custom palette'", output: "Custom colors!" }
   ]}
 />
               `}
@@ -613,7 +926,7 @@ export default function Docs() {
                 {
                   prompt: "System ready",
                   output: (
-                    <span style={{ color: "green" }}>
+                    <span style={{ color: "#9ece6a" }}>
                       All systems operational
                     </span>
                   ),
@@ -646,7 +959,7 @@ export default function Docs() {
     },
     {
       prompt: "System ready",
-      output: <span style={{ color: "green" }}>All systems operational</span>
+      output: <span style={{ color: "#9ece6a" }}>All systems operational</span>
     }
   ]}
 />
