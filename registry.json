@@ -25,30 +25,30 @@
       ],
       "cssVars": {
         "light": {
-          "terminable-bg": "#f0f0f0",
-          "terminable-prompt": "#006600",
-          "terminable-output": "#1a1a1a",
-          "terminable-titlebar-bg": "#d4d4d4",
-          "terminable-border": "#b0b0b0",
+          "terminable-bg": "#1a1b26",
+          "terminable-prompt": "#73daca",
+          "terminable-output": "#c0caf5",
+          "terminable-titlebar-bg": "#24283b",
+          "terminable-border": "#3b4261",
           "terminable-dot-green": "#27c93f",
           "terminable-dot-yellow": "#ffbd2e",
           "terminable-dot-red": "#ff5f56",
-          "terminable-title-color": "#333333",
-          "terminable-hover-bg": "#d4d4d4",
-          "terminable-cursor-color": "#006600"
+          "terminable-title-color": "#a9b1d6",
+          "terminable-hover-bg": "#292e42",
+          "terminable-cursor-color": "#c0caf5"
         },
         "dark": {
-          "terminable-bg": "#1a1a1a",
-          "terminable-prompt": "#00ff00",
-          "terminable-output": "#ffffff",
-          "terminable-titlebar-bg": "#333333",
-          "terminable-border": "#555555",
+          "terminable-bg": "#1a1b26",
+          "terminable-prompt": "#73daca",
+          "terminable-output": "#c0caf5",
+          "terminable-titlebar-bg": "#24283b",
+          "terminable-border": "#3b4261",
           "terminable-dot-green": "#27c93f",
           "terminable-dot-yellow": "#ffbd2e",
           "terminable-dot-red": "#ff5f56",
-          "terminable-title-color": "#cccccc",
-          "terminable-hover-bg": "#333333",
-          "terminable-cursor-color": "#00ff00"
+          "terminable-title-color": "#a9b1d6",
+          "terminable-hover-bg": "#292e42",
+          "terminable-cursor-color": "#c0caf5"
         }
       }
     }

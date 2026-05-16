@@ -59,17 +59,17 @@ export type TerminableProps = {
 // ── CSS custom property defaults ─────────────────────────────────────────────
 
 const CSS_VAR_DEFAULTS: Record<string, string> = {
-  "--terminable-bg": "#1a1a1a",
-  "--terminable-prompt": "#00ff00",
-  "--terminable-output": "#ffffff",
-  "--terminable-titlebar-bg": "#333333",
-  "--terminable-border": "#555555",
+  "--terminable-bg": "#1a1b26",
+  "--terminable-prompt": "#73daca",
+  "--terminable-output": "#c0caf5",
+  "--terminable-titlebar-bg": "#24283b",
+  "--terminable-border": "#3b4261",
   "--terminable-dot-green": "#27c93f",
   "--terminable-dot-yellow": "#ffbd2e",
   "--terminable-dot-red": "#ff5f56",
-  "--terminable-title-color": "#cccccc",
-  "--terminable-hover-bg": "#333333",
-  "--terminable-cursor-color": "#00ff00",
+  "--terminable-title-color": "#a9b1d6",
+  "--terminable-hover-bg": "#292e42",
+  "--terminable-cursor-color": "#c0caf5",
 };
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
