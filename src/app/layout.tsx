@@ -53,7 +53,7 @@ export default function RootLayout({
               </NavigationMenu>
             </div>
           </nav>
-          <div className="pt-16">
+          <div className="pt-14">
             {children}
             <footer className="border-t border-border/50 p-4 pb-8 pt-8">
               <div className="mx-auto max-w-7xl">
