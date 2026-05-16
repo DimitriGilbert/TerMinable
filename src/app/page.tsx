@@ -204,48 +204,55 @@ export default function HomePage() {
   );
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-[5rem]">
-          TerMinable
-        </h1>
-        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-[2rem]">
-          A Minable Terminal for your docs
-        </h2>
-        <h3 className="text-xl font-bold tracking-tight text-foreground sm:text-[1.5rem]">
-          As a{" "}
-          <GlowLink
-            href="https://ui.shadcn.com/"
-            target="_blank"
-            color="rgba(173,251,28,0.8)"
-            size="12px"
-            duration={0.5}
-            scale={1.1}
-            className="font-semibold drop-shadow-[0_0_8px_rgba(173,251,28,0.8)]"
-            glowClassName="rounded-md px-1.5 py-0.5 bg-primary/10 dark:bg-primary-foreground/10"
-          >
-            Shad-cn/ui
-          </GlowLink>{" "}
-          component
-        </h3>
-        <PkgMngCmdCopy
-          className="w-full max-w-2xl"
-          buttonClassName="px-6 py-3"
-          preClassName="w-full"
-          cmd={`shadcn@latest add https://DimitriGilbert.github.io/TerMinable/r/terminable.json`}
-        />
-      </div>
+    <main className="flex min-h-[calc(100vh-4rem)] items-center">
+      <div className="container grid grid-cols-1 items-center gap-12 px-4 py-12 lg:grid-cols-2 lg:gap-16">
+        <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+          <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl">
+            TerMinable
+          </h1>
+          <p className="mt-4 text-xl font-semibold text-foreground/80">
+            A terminal simulator for your docs
+          </p>
+          <p className="mt-2 text-lg text-muted-foreground">
+            As a{" "}
+            <GlowLink
+              href="https://ui.shadcn.com/"
+              target="_blank"
+              color="rgba(173,251,28,0.8)"
+              size="12px"
+              duration={0.5}
+              scale={1.1}
+              className="font-semibold drop-shadow-[0_0_8px_rgba(173,251,28,0.8)]"
+              glowClassName="rounded-md px-1.5 py-0.5 bg-primary/10 dark:bg-primary-foreground/10"
+            >
+              shadcn/ui
+            </GlowLink>{" "}
+            component
+          </p>
+          <div className="mt-8 w-full max-w-xl">
+            <PkgMngCmdCopy
+              className="w-full"
+              buttonClassName="px-4 py-2 text-sm"
+              preClassName="w-full"
+              cmd={`shadcn@latest add https://DimitriGilbert.github.io/TerMinable/r/terminable.json`}
+            />
+          </div>
+        </div>
 
-      <Terminable
-        title={TermTitle}
-        backgroundColor={TermBackground}
-        promptColor={TermPromptColor}
-        outputColor={TermOutputColor}
-        termPrompt={TermPrompt}
-        startLine={""}
-        commands={commands}
-        titleBarVariant="macos"
-      />
+        <div className="flex justify-center">
+          <Terminable
+            title={TermTitle}
+            backgroundColor={TermBackground}
+            promptColor={TermPromptColor}
+            outputColor={TermOutputColor}
+            termPrompt={TermPrompt}
+            startLine={""}
+            commands={commands}
+            titleBarVariant="macos"
+            width="w-full"
+          />
+        </div>
+      </div>
     </main>
   );
 }

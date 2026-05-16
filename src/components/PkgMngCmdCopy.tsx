@@ -18,10 +18,10 @@ export function PkgMngCmdCopy({
   cmd = "",
 }: PkgMngCmdCopyProps) {
   const packageManagers = [
-    { name: "npm", command: "npx " + cmd },
-    { name: "yarn", command: "yarn " + cmd },
-    { name: "pnpm", command: "pnpm " + cmd },
-    { name: "bun", command: "bun x --bun " + cmd },
+    { name: "npx", command: "npx " + cmd },
+    { name: "bunx", command: "bunx " + cmd },
+    { name: "pnpm", command: "pnpm dlx " + cmd },
+    { name: "yarn", command: "yarn dlx " + cmd },
   ];
 
   const [selectedManager, setSelectedManager] = useState(packageManagers[0]);
@@ -53,17 +53,17 @@ export function PkgMngCmdCopy({
 
       <div className="group relative">
         <pre
-          className={`rounded-lg border border-gray-700 bg-gray-900/50 p-4 backdrop-blur-md ${preClassName}`}
+          className={`rounded-lg border border-border bg-card p-4 backdrop-blur-md ${preClassName}`}
         >
-          <code className="flex items-center gap-2 text-sm text-white">
+          <code className="flex items-center gap-2 text-sm text-foreground">
             {selectedManager?.command}
           </code>
         </pre>
         <button
           onClick={handleCopy}
-          className="absolute -right-2 -top-2 rounded-full border border-gray-700 bg-gray-800/50 p-2 opacity-40 backdrop-blur-md transition-opacity hover:bg-gray-700/50 group-hover:opacity-100"
+          className="absolute -right-2 -top-2 rounded-full border border-border bg-card/80 p-2 opacity-40 backdrop-blur-md transition-opacity group-hover:opacity-100"
         >
-          <Copy className="text-white" />
+          <Copy className="text-foreground" />
         </button>
       </div>
     </div>
