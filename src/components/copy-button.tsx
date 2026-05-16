@@ -16,9 +16,9 @@ export function CopyButton({ value, className }: { value: string; className?: st
   return (
     <button
       onClick={copyToClipboard}
-      className={`p-2 rounded-md hover:bg-gray-700 transition-colors ${className}`}
+      className={`rounded-md p-2 transition-colors hover:bg-muted ${className}`}
     >
-      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
     </button>
   );
-} 
+}

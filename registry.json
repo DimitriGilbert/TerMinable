@@ -16,6 +16,9 @@
     {
       "name": "terminable",
       "type": "registry:component",
+      "registryDependencies": [
+        "scroll-area"
+      ],
       "files": [
         {
           "name": "terminable",

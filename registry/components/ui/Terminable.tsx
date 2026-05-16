@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
+import { ScrollArea } from "~/components/ui/scroll-area";
+
 // ── Types ────────────────────────────────────────────────────────────────────
 
 export type OutputContent = {
@@ -245,17 +247,35 @@ export default function Terminable({
 
   // ── Auto-scroll ──────────────────────────────────────────────────────────
 
+  const getScrollViewport = useCallback(() => {
+    return terminalRef.current?.querySelector<HTMLDivElement>(
+      '[data-slot="scroll-area-viewport"]',
+    );
+  }, []);
+
   useEffect(() => {
-    if (terminalRef.current && !userScrolledRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    const viewport = getScrollViewport();
+    if (viewport && !userScrolledRef.current) {
+      viewport.scrollTop = viewport.scrollHeight;
     }
-  }, [display]);
+  }, [display, getScrollViewport]);
 
   const handleScroll = useCallback(() => {
-    if (!terminalRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = terminalRef.current;
+    const viewport = getScrollViewport();
+    if (!viewport) return;
+    const { scrollTop, scrollHeight, clientHeight } = viewport;
     userScrolledRef.current = scrollHeight - scrollTop !== clientHeight;
-  }, []);
+  }, [getScrollViewport]);
+
+  useEffect(() => {
+    const viewport = getScrollViewport();
+    if (!viewport) return;
+
+    viewport.addEventListener("scroll", handleScroll);
+    return () => {
+      viewport.removeEventListener("scroll", handleScroll);
+    };
+  }, [getScrollViewport, handleScroll]);
 
   // ── Command output processing ────────────────────────────────────────────
 
@@ -582,79 +602,78 @@ export default function Terminable({
       }}
     >
       {renderTitleBar()}
-      <div
+      <ScrollArea
         ref={terminalRef}
-        onScroll={handleScroll}
-        className={`${height} overflow-y-auto p-5 whitespace-pre-wrap break-words`}
+        className={`${height} overflow-hidden [&_[data-slot=scroll-area-viewport]]:max-h-[inherit] [&_[data-slot=scroll-area-viewport]]:min-h-[inherit] [&_[data-slot=scroll-area-viewport]]:overflow-x-hidden [&_[data-slot=scroll-area-viewport]]:overflow-y-auto`}
         style={{ color: "var(--terminable-prompt)" }}
         role="log"
         aria-live="polite"
       >
-        {display.map((entry, index) => (
-          <div key={`${index}-${entry.type}`} className="my-1">
-            {entry.type === "command" && (
-              <div className="flex">
-                <span
-                  className="mr-2"
-                  style={{ color: "var(--terminable-prompt)" }}
-                >
-                  {termPrompt}
-                </span>
-                <span
-                  className={`cursor-pointer break-all rounded px-1 ${
-                    !entry.done
-                      ? "animate-blink border-r-2"
-                      : ""
-                  }${
-                    allowCopy && entry.done && typeof entry.content === "string"
-                      ? " focus:outline focus:outline-2 focus:outline-[var(--terminable-cursor-color)]"
-                      : ""
-                  }`}
-                  style={{
-                    borderColor: !entry.done
-                      ? "var(--terminable-cursor-color)"
-                      : undefined,
-                  }}
-                  onClick={() => handleCommandClick(entry)}
-                  onKeyDown={
-                    allowCopy && entry.done && typeof entry.content === "string"
-                      ? (e) => handleCommandKeyDown(e, entry)
-                      : undefined
-                  }
-                  tabIndex={
-                    allowCopy && entry.done && typeof entry.content === "string"
-                      ? 0
-                      : undefined
-                  }
-                  aria-label={
-                    allowCopy && entry.done && typeof entry.content === "string"
-                      ? `Click to copy: ${entry.content}`
-                      : undefined
-                  }
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.backgroundColor =
-                      "var(--terminable-hover-bg)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.backgroundColor =
-                      "";
-                  }}
+        <div className="p-5 whitespace-pre-wrap break-words">
+          {display.map((entry, index) => (
+            <div key={`${index}-${entry.type}`} className="my-1">
+              {entry.type === "command" && (
+                <div className="flex">
+                  <span
+                    className="mr-2"
+                    style={{ color: "var(--terminable-prompt)" }}
+                  >
+                    {termPrompt}
+                  </span>
+                  <span
+                    className={`cursor-pointer break-all rounded px-1 ${
+                      !entry.done ? "animate-blink border-r-2" : ""
+                    }${
+                      allowCopy && entry.done && typeof entry.content === "string"
+                        ? " focus:outline focus:outline-2 focus:outline-[var(--terminable-cursor-color)]"
+                        : ""
+                    }`}
+                    style={{
+                      borderColor: !entry.done
+                        ? "var(--terminable-cursor-color)"
+                        : undefined,
+                    }}
+                    onClick={() => handleCommandClick(entry)}
+                    onKeyDown={
+                      allowCopy && entry.done && typeof entry.content === "string"
+                        ? (e) => handleCommandKeyDown(e, entry)
+                        : undefined
+                    }
+                    tabIndex={
+                      allowCopy && entry.done && typeof entry.content === "string"
+                        ? 0
+                        : undefined
+                    }
+                    aria-label={
+                      allowCopy && entry.done && typeof entry.content === "string"
+                        ? `Click to copy: ${entry.content}`
+                        : undefined
+                    }
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLDivElement).style.backgroundColor =
+                        "var(--terminable-hover-bg)";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLDivElement).style.backgroundColor =
+                        "";
+                    }}
+                  >
+                    {entry.content}
+                  </span>
+                </div>
+              )}
+              {entry.type === "output" && (
+                <div
+                  className="ml-6 whitespace-pre-wrap break-all"
+                  style={{ color: "var(--terminable-output)" }}
                 >
                   {entry.content}
-                </span>
-              </div>
-            )}
-            {entry.type === "output" && (
-              <div
-                className="ml-6 whitespace-pre-wrap break-all"
-                style={{ color: "var(--terminable-output)" }}
-              >
-                {entry.content}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
     </section>
   );
 }
