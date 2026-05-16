@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import Terminable, {
   type CommandEntry,
@@ -9,8 +9,8 @@ import { CopyButton } from "~/components/copy-button";
 export type TerminableExampleProps = {
   commands: CommandEntry[];
   title: string | React.ReactNode;
-  codeString?: string; // New prop for raw code string
-  start?: boolean; // Add this line
+  codeString?: string;
+  start?: boolean;
 };
 
 const TerminableExample: React.FC<TerminableExampleProps> = ({
@@ -20,11 +20,15 @@ const TerminableExample: React.FC<TerminableExampleProps> = ({
   start,
 }) => {
   const [activeTab, setActiveTab] = useState("preview");
-  const [instanceKey, setInstanceKey] = useState(0);
-
-  // Reset terminal when commands change
-  useEffect(() => {
-    setInstanceKey(prev => prev + 1);
+  const instanceKey = useMemo(() => {
+    let h = 0;
+    for (const cmd of commands) {
+      const s = typeof cmd.prompt === "string" ? cmd.prompt : "";
+      for (let i = 0; i < s.length; i++) {
+        h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+      }
+    }
+    return h;
   }, [commands]);
 
   return (

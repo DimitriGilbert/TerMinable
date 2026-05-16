@@ -8,8 +8,6 @@ import { useInView } from "react-intersection-observer";
 import { type TerminableExampleProps } from "~/components/TerminableExample";
 import { GlowLink } from "~/components/ui/glow-link";
 import Link from "next/link";
-import { Button } from "~/components/ui/button";
-import { FaCopy } from "react-icons/fa";
 import { PkgMngCmdCopy } from "~/components/PkgMngCmdCopy";
 
 const LazyTerminableExample = (props: TerminableExampleProps) => {

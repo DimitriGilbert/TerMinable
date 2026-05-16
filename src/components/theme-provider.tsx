@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import { Button } from "~/components/ui/button";
-import { FaMoon, FaSun } from "react-icons/fa";
+import { Moon, Sun } from "lucide-react";
 import { Toaster } from "~/components/ui/sonner";
 type Theme = "light" | "dark";
 type ThemeContextType = {
@@ -57,9 +57,9 @@ export function ThemeToggle() {
       className="hover:bg-white/20"
     >
       {theme === "dark" ? (
-        <FaSun className="h-[1.2rem] w-[1.2rem]" />
+        <Sun className="h-[1.2rem] w-[1.2rem]" />
       ) : (
-        <FaMoon className="h-[1.2rem] w-[1.2rem]" />
+        <Moon className="h-[1.2rem] w-[1.2rem]" />
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>

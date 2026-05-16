@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
-import { FaCopy } from "react-icons/fa";
+import { Copy } from "lucide-react";
 
 interface PkgMngCmdCopyProps {
   registryUrl?: string;
@@ -67,7 +67,7 @@ export function PkgMngCmdCopy({
           onClick={handleCopy}
           className="absolute -right-2 -top-2 rounded-full border border-gray-700 bg-gray-800/50 p-2 opacity-40 backdrop-blur-md transition-opacity hover:bg-gray-700/50 group-hover:opacity-100"
         >
-          <FaCopy className="text-white" />
+          <Copy className="text-white" />
         </button>
       </div>
     </div>
