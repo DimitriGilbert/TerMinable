@@ -1,12 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "terminable",
-  "dependencies": [
-    "sonner"
-  ],
-  "registryDependencies": [
-    "menubar"
-  ],
   "files": [
     {
       "path": "registry/components/ui/Terminable.tsx",
@@ -14,5 +8,33 @@
       "type": "registry:component"
     }
   ],
+  "cssVars": {
+    "light": {
+      "terminable-bg": "#f0f0f0",
+      "terminable-prompt": "#006600",
+      "terminable-output": "#1a1a1a",
+      "terminable-titlebar-bg": "#d4d4d4",
+      "terminable-border": "#b0b0b0",
+      "terminable-dot-green": "#27c93f",
+      "terminable-dot-yellow": "#ffbd2e",
+      "terminable-dot-red": "#ff5f56",
+      "terminable-title-color": "#333333",
+      "terminable-hover-bg": "#d4d4d4",
+      "terminable-cursor-color": "#006600"
+    },
+    "dark": {
+      "terminable-bg": "#1a1a1a",
+      "terminable-prompt": "#00ff00",
+      "terminable-output": "#ffffff",
+      "terminable-titlebar-bg": "#333333",
+      "terminable-border": "#555555",
+      "terminable-dot-green": "#27c93f",
+      "terminable-dot-yellow": "#ffbd2e",
+      "terminable-dot-red": "#ff5f56",
+      "terminable-title-color": "#cccccc",
+      "terminable-hover-bg": "#333333",
+      "terminable-cursor-color": "#00ff00"
+    }
+  },
   "type": "registry:component"
 }

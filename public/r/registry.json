@@ -5,7 +5,6 @@
   "description": "A customizable terminal simulator component for React applications",
   "homepage": "https://github.com/butter3415/terminable",
   "main": "registry/components/ui/Terminable.tsx",
-  "style": "registry/styles/Terminable.css",
   "repository": {
     "type": "git",
     "url": "https://github.com/butter3415/terminable"
@@ -17,15 +16,41 @@
     {
       "name": "terminable",
       "type": "registry:component",
-      "registryDependencies": ["menubar"],
-      "dependencies": ["sonner"],
       "files": [
         {
           "name": "terminable",
           "type": "registry:component",
           "path": "registry/components/ui/Terminable.tsx"
         }
-      ]
+      ],
+      "cssVars": {
+        "light": {
+          "terminable-bg": "#f0f0f0",
+          "terminable-prompt": "#006600",
+          "terminable-output": "#1a1a1a",
+          "terminable-titlebar-bg": "#d4d4d4",
+          "terminable-border": "#b0b0b0",
+          "terminable-dot-green": "#27c93f",
+          "terminable-dot-yellow": "#ffbd2e",
+          "terminable-dot-red": "#ff5f56",
+          "terminable-title-color": "#333333",
+          "terminable-hover-bg": "#d4d4d4",
+          "terminable-cursor-color": "#006600"
+        },
+        "dark": {
+          "terminable-bg": "#1a1a1a",
+          "terminable-prompt": "#00ff00",
+          "terminable-output": "#ffffff",
+          "terminable-titlebar-bg": "#333333",
+          "terminable-border": "#555555",
+          "terminable-dot-green": "#27c93f",
+          "terminable-dot-yellow": "#ffbd2e",
+          "terminable-dot-red": "#ff5f56",
+          "terminable-title-color": "#cccccc",
+          "terminable-hover-bg": "#333333",
+          "terminable-cursor-color": "#00ff00"
+        }
+      }
     }
   ]
-} 
+}
