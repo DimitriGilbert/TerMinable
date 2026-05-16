@@ -205,12 +205,12 @@ export default function HomePage() {
 
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center">
-      <div className="container grid grid-cols-1 items-center gap-12 px-4 py-12 lg:grid-cols-2 lg:gap-16">
+      <div className="grid w-full grid-cols-1 items-center gap-12 px-6 py-12 lg:grid-cols-[45fr_55fr] lg:gap-16 lg:px-12">
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
           <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl">
             TerMinable
           </h1>
-          <p className="mt-4 text-xl font-semibold text-foreground/80">
+          <p className="mt-3 text-xl font-semibold text-foreground/80">
             A terminal simulator for your docs
           </p>
           <p className="mt-2 text-lg text-muted-foreground">
@@ -229,7 +229,7 @@ export default function HomePage() {
             </GlowLink>{" "}
             component
           </p>
-          <div className="mt-8 w-full max-w-xl">
+          <div className="mt-8 w-full">
             <PkgMngCmdCopy
               className="w-full"
               buttonClassName="px-4 py-2 text-sm"
@@ -239,7 +239,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex w-full justify-center">
           <Terminable
             title={TermTitle}
             backgroundColor={TermBackground}

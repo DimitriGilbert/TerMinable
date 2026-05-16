@@ -36,7 +36,7 @@ export function PkgMngCmdCopy({
 
   return (
     <div className={`flex flex-col items-center gap-4 ${className}`}>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap justify-center gap-2">
         {packageManagers.map((manager) => (
           <Button
             key={manager.name}
@@ -51,11 +51,11 @@ export function PkgMngCmdCopy({
         ))}
       </div>
 
-      <div className="group relative">
+      <div className="group relative w-full">
         <pre
-          className={`rounded-lg border border-border bg-card p-4 backdrop-blur-md ${preClassName}`}
+          className={`overflow-x-auto whitespace-pre-wrap break-all rounded-lg border border-border bg-card p-4 text-xs backdrop-blur-md sm:text-sm ${preClassName}`}
         >
-          <code className="flex items-center gap-2 text-sm text-foreground">
+          <code className="text-foreground">
             {selectedManager?.command}
           </code>
         </pre>
