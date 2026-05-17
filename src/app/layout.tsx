@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import Script from "next/script";
 import { ThemeProvider, ThemeToggle } from "~/components/theme-provider";
 import {
   NavigationMenu,
@@ -23,6 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
+        <Script
+          src="https://chemin.dbuild.dev/script.js"
+          data-id="7040d34e-b41f-4f20-88d1-b86ac93266c4"
+          data-utcoffset="2"
+          data-server="https://chemin.dbuild.dev"
+          strategy="afterInteractive"
+        />
         <ThemeProvider>
           <nav className="fixed left-0 right-0 top-0 z-50 border-b border-border/50 bg-background/80 px-4 py-1.5 backdrop-blur-md">
             <div className="mx-auto max-w-7xl">
