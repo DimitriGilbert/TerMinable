@@ -6,6 +6,7 @@ import { cn } from "~/lib/utils";
 interface GlowLinkProps {
   href: string;
   target?: string;
+  rel?: string;
   color?: string;
   size?: string | number;
   duration?: number;
@@ -18,6 +19,7 @@ interface GlowLinkProps {
 export function GlowLink({
   href,
   target = "_self",
+  rel,
   color = "rgba(168, 85, 247, 0.8)",
   size = "12px",
   duration = 0.5,
@@ -45,7 +47,7 @@ export function GlowLink({
       }}
       className={cn("inline-block", glowClassName)}
     >
-      <Link href={href} target={target} className={cn("inline-block", className)}>
+      <Link href={href} target={target} rel={rel} className={cn("inline-block", className)}>
         {children}
       </Link>
     </motion.span>

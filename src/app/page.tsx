@@ -11,9 +11,9 @@ export default function HomePage() {
   const [TermTitle, setTermTitle] = useState<string | React.ReactNode>(
     "Terminable",
   );
-  const [TermBackground, setTermBackground] = useState("var(--terminable-bg)");
-  const [TermPromptColor, setTermPromptColor] = useState("var(--terminable-prompt)");
-  const [TermOutputColor, setTermOutputColor] = useState("var(--terminable-output)");
+  const [TermBackground, setTermBackground] = useState("#1a1b26");
+  const [TermPromptColor, setTermPromptColor] = useState("#73daca");
+  const [TermOutputColor, setTermOutputColor] = useState("#c0caf5");
   const [TermPrompt, setTermPrompt] = useState("$ ");
 
   const commands = useMemo(
@@ -128,9 +128,9 @@ export default function HomePage() {
         prompt: "Seeeee, the Tokyo Night palette is nicer though :D",
         output: "what do you mean it was a poor choice of colors...",
         onDone: () => {
-          setTermBackground("var(--terminable-bg)");
-          setTermPromptColor("var(--terminable-prompt)");
-          setTermOutputColor("var(--terminable-output)");
+          setTermBackground("#1a1b26");
+          setTermPromptColor("#73daca");
+          setTermOutputColor("#c0caf5");
           setTermPrompt("$ ");
           setTermTitle("Terminable");
         },

@@ -13,6 +13,9 @@ export type TerminableExampleProps = {
   codeString?: string;
   start?: boolean;
   titleBarVariant?: TitleBarVariant;
+  backgroundColor?: string;
+  promptColor?: string;
+  outputColor?: string;
 };
 
 const TerminableExample: React.FC<TerminableExampleProps> = ({
@@ -21,6 +24,9 @@ const TerminableExample: React.FC<TerminableExampleProps> = ({
   codeString,
   start,
   titleBarVariant,
+  backgroundColor,
+  promptColor,
+  outputColor,
 }) => {
   const [activeTab, setActiveTab] = useState("preview");
   const instanceKey = useMemo(() => {
@@ -37,7 +43,7 @@ const TerminableExample: React.FC<TerminableExampleProps> = ({
   return (
     <div className="flex flex-col gap-4">
       <h3 className="text-xl font-semibold text-primary">{title}</h3>
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-col">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="preview">Preview</TabsTrigger>
           <TabsTrigger value="code">Code</TabsTrigger>
@@ -49,6 +55,9 @@ const TerminableExample: React.FC<TerminableExampleProps> = ({
               start={activeTab === "preview" && !!start}
               key={instanceKey}
               titleBarVariant={titleBarVariant}
+              backgroundColor={backgroundColor}
+              promptColor={promptColor}
+              outputColor={outputColor}
             />
           </div>
         </TabsContent>

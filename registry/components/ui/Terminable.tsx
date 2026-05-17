@@ -295,7 +295,7 @@ export default function Terminable({
 
       for (const line of outputs) {
         if (signal.aborted) return;
-        if (!line) continue;
+        if (line == null) continue;
 
         await abortableDelay(defaultSpeed, signal);
 
@@ -529,10 +529,10 @@ export default function Terminable({
       }
 
       const cmd = entry.index !== undefined ? commands[entry.index] : undefined;
-      cmd?.onCopy?.();
 
       copyToClipboard(entry.content)
         .then(() => {
+          cmd?.onCopy?.();
           onCopySuccess?.(entry.content as string);
         })
         .catch((error: unknown) => {
@@ -649,6 +649,11 @@ export default function Terminable({
                     aria-label={
                       allowCopy && entry.done && typeof entry.content === "string"
                         ? `Click to copy: ${entry.content}`
+                        : undefined
+                    }
+                    role={
+                      allowCopy && entry.done && typeof entry.content === "string"
+                        ? "button"
                         : undefined
                     }
                     onMouseEnter={(e) => {

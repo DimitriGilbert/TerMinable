@@ -50,6 +50,7 @@ export default function Docs() {
             <GlowLink
               href="https://ui.shadcn.com/"
               target="_blank"
+              rel="noopener noreferrer"
               color="rgba(173,251,28,0.8)"
               size="12px"
               duration={0.5}
@@ -63,6 +64,7 @@ export default function Docs() {
             <Link
               href="https://ui.shadcn.com/docs/installation/nextjs"
               target="_blank"
+              rel="noopener noreferrer"
               className="rounded bg-muted px-1 py-0.5 font-mono text-primary"
             >
               shadcn/ui registry
@@ -200,24 +202,24 @@ export default function Docs() {
                   backgroundColor
                 </code>,
                 <code key="backgroundColor0">string</code>,
-                <code key="backgroundColor1">&quot;#1a1b26&quot;</code>,
-                "CSS color value for the terminal background. Overrides the default CSS var.",
+                <em key="backgroundColor1">CSS var</em>,
+                "CSS color value for the terminal background. Overrides the internal CSS variable.",
               ],
               [
                 <code key="promptColor" className="text-primary">
                   promptColor
                 </code>,
                 <code key="promptColor0">string</code>,
-                <code key="promptColor1">&quot;#73daca&quot;</code>,
-                "CSS color value for the prompt text. Overrides the default CSS var.",
+                <em key="promptColor1">CSS var</em>,
+                "CSS color value for the prompt text. Overrides the internal CSS variable.",
               ],
               [
                 <code key="outputColor" className="text-primary">
                   outputColor
                 </code>,
                 <code key="outputColor0">string</code>,
-                <code key="outputColor1">&quot;#c0caf5&quot;</code>,
-                "CSS color value for the output text. Overrides the default CSS var.",
+                <em key="outputColor1">CSS var</em>,
+                "CSS color value for the output text. Overrides the internal CSS variable.",
               ],
               [
                 <code key="commandDelay" className="text-primary">
@@ -836,6 +838,9 @@ export default function Docs() {
 
             <LazyTerminableExample
               title="Custom Colors"
+              backgroundColor="#1e1e3f"
+              promptColor="#f7768e"
+              outputColor="#9ece6a"
               commands={[
                 {
                   prompt: "echo 'custom palette'",
