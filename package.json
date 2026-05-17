@@ -6,7 +6,7 @@
   "scripts": {
     "build": "next build",
     "clean-build": "rm -rf out && next build",
-    "export": "touch out/.nojekyll",
+    "export": "touch out/.nojekyll && cp public/CNAME out/CNAME",
     "deploy": "gh-pages --dotfiles -d out",
     "do-the-site": "bun run registry:build && bun run clean-build && bun run export && bun run deploy",
     "check": "eslint . && tsc --noEmit",

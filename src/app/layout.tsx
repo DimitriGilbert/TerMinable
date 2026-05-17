@@ -20,8 +20,6 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const basePath = process.env.NODE_ENV === "production" ? "/TerMinable" : "";
-
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
@@ -32,7 +30,7 @@ export default function RootLayout({
                 <NavigationMenuList className="flex justify-center">
                   <NavigationMenuItem>
                     <NavigationMenuLink
-                      href={`${basePath}/`}
+                      href="/"
                       className={navigationMenuTriggerStyle()}
                     >
                       Home
@@ -40,7 +38,7 @@ export default function RootLayout({
                   </NavigationMenuItem>
                   <NavigationMenuItem>
                     <NavigationMenuLink
-                      href={`${basePath}/docs`}
+                      href="/docs"
                       className={navigationMenuTriggerStyle()}
                     >
                       Docs
