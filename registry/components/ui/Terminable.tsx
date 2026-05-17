@@ -15,6 +15,7 @@ export type DisplayEntry = {
   type: "command" | "output";
   content: string | React.ReactNode;
   done?: boolean;
+  index?: number;
 };
 
 export type CommandEntry = {
@@ -353,9 +354,10 @@ export default function Terminable({
 
         // Type a single prompt
         const typePrompt = async (prompt: string | React.ReactNode) => {
+          const cmdIndex = processingStateRef.current.currentIndex;
           setDisplay((prev) => [
             ...prev,
-            { type: "command", content: "", done: false },
+            { type: "command", content: "", done: false, index: cmdIndex },
           ]);
 
           if (typeof prompt !== "string") {
@@ -526,7 +528,7 @@ export default function Terminable({
         return;
       }
 
-      const cmd = commands[processingStateRef.current.currentIndex];
+      const cmd = entry.index !== undefined ? commands[entry.index] : undefined;
       cmd?.onCopy?.();
 
       copyToClipboard(entry.content)

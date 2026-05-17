@@ -24,7 +24,10 @@ export function PkgMngCmdCopy({
     { name: "yarn", command: "yarn dlx " + cmd },
   ];
 
-  const [selectedManager, setSelectedManager] = useState(packageManagers[0]);
+  const [selectedManagerName, setSelectedManagerName] = useState("npx");
+  const selectedManager =
+    packageManagers.find((m) => m.name === selectedManagerName) ??
+    packageManagers[0];
 
   const handleCopy = () => {
     navigator.clipboard
@@ -43,7 +46,7 @@ export function PkgMngCmdCopy({
             variant={
               selectedManager?.name === manager.name ? "default" : "outline"
             }
-            onClick={() => setSelectedManager(manager)}
+            onClick={() => setSelectedManagerName(manager.name)}
             className={`capitalize ${buttonClassName}`}
           >
             {manager.name}
@@ -60,6 +63,8 @@ export function PkgMngCmdCopy({
           </code>
         </pre>
         <button
+          type="button"
+          aria-label="Copy command"
           onClick={handleCopy}
           className="absolute -right-2 -top-2 rounded-full border border-border bg-card/80 p-2 opacity-40 backdrop-blur-md transition-opacity group-hover:opacity-100"
         >

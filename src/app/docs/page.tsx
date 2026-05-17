@@ -546,6 +546,23 @@ export default function Docs() {
             />
 
             <LazyTerminableExample
+              title="Minimal"
+              titleBarVariant="minimal"
+              commands={[
+                { prompt: "echo 'Minimal style'", output: "Minimal style" },
+              ]}
+              codeString={`
+<Terminable
+  titleBarVariant="minimal"
+  title="Terminal"
+  commands={[
+    { prompt: "echo 'Minimal style'", output: "Minimal style" }
+  ]}
+/>
+              `}
+            />
+
+            <LazyTerminableExample
               title="none"
               titleBarVariant="none"
               commands={[
@@ -732,17 +749,17 @@ export default function Docs() {
               commands={[
                 {
                   prompt: (
-                    <span style={{ color: "#e0af68" }}>Custom prompt</span>
+                    <span style={{ color: "var(--terminable-prompt)" }}>Custom prompt</span>
                   ),
-                  output: <span style={{ color: "#7dcfff" }}>Custom output</span>,
+                  output: <span style={{ color: "var(--terminable-output)" }}>Custom output</span>,
                 },
                 {
                   prompt: "Multiple React nodes",
                   output: [
-                    <div style={{ color: "#f7768e" }} key="1">
+                    <div style={{ color: "var(--terminable-error)" }} key="1">
                       First node
                     </div>,
-                    <div style={{ color: "#7aa2f7" }} key="2">
+                    <div style={{ color: "var(--terminable-accent)" }} key="2">
                       Second node
                     </div>,
                   ],
@@ -773,10 +790,12 @@ export default function Docs() {
                 {
                   prompt: "onDone callback",
                   output: "This command triggers onDone when finished",
+                  onDone: () => console.log("Done!"),
                 },
                 {
                   prompt: "onCopy callback",
                   output: "Click this command to copy it",
+                  onCopy: () => console.log("Copied!"),
                 },
                 {
                   prompt: "onBeforeOutput callback",
@@ -785,6 +804,7 @@ export default function Docs() {
                     delay: 1500,
                     placeholder: "Preparing output...",
                   },
+                  onBeforeOutput: () => console.log("Before output!"),
                 },
               ]}
               codeString={`
@@ -926,7 +946,7 @@ export default function Docs() {
                 {
                   prompt: "System ready",
                   output: (
-                    <span style={{ color: "#9ece6a" }}>
+                    <span style={{ color: "var(--terminable-output)" }}>
                       All systems operational
                     </span>
                   ),

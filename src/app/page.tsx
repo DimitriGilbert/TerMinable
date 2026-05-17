@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { Button } from "~/components/ui/button";
+import { buttonVariants } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 import Terminable from "~registry/components/ui/Terminable";
 import { GlowLink } from "~/components/ui/glow-link";
 import { PkgMngCmdCopy } from "~/components/PkgMngCmdCopy";
@@ -10,9 +11,9 @@ export default function HomePage() {
   const [TermTitle, setTermTitle] = useState<string | React.ReactNode>(
     "Terminable",
   );
-  const [TermBackground, setTermBackground] = useState("#1a1b26");
-  const [TermPromptColor, setTermPromptColor] = useState("#73daca");
-  const [TermOutputColor, setTermOutputColor] = useState("#c0caf5");
+  const [TermBackground, setTermBackground] = useState("var(--terminable-bg)");
+  const [TermPromptColor, setTermPromptColor] = useState("var(--terminable-prompt)");
+  const [TermOutputColor, setTermOutputColor] = useState("var(--terminable-output)");
   const [TermPrompt, setTermPrompt] = useState("$ ");
 
   const commands = useMemo(
@@ -69,12 +70,11 @@ export default function HomePage() {
               I did it to use on many of my project docs, <br />
               <Link
                 href="https://butt3r.dev"
-                className="text-blue-400"
+                className={cn(buttonVariants({ variant: "outline" }), "mt-2 text-blue-400")}
                 target="_blank"
+                rel="noopener noreferrer"
               >
-                <Button variant="outline" className="mt-2">
-                  Butt3r.dev
-                </Button>
+                Butt3r.dev
               </Link>
             </div>
           ),
@@ -128,9 +128,9 @@ export default function HomePage() {
         prompt: "Seeeee, the Tokyo Night palette is nicer though :D",
         output: "what do you mean it was a poor choice of colors...",
         onDone: () => {
-          setTermBackground("#1a1b26");
-          setTermPromptColor("#73daca");
-          setTermOutputColor("#c0caf5");
+          setTermBackground("var(--terminable-bg)");
+          setTermPromptColor("var(--terminable-prompt)");
+          setTermOutputColor("var(--terminable-output)");
           setTermPrompt("$ ");
           setTermTitle("Terminable");
         },
@@ -189,11 +189,16 @@ export default function HomePage() {
         output: {
           content: (
             <div className="flex flex-row gap-2">
-              <Link href="/docs">
-                <Button variant="outline">Docs</Button>
+              <Link href="/docs" className={buttonVariants({ variant: "outline" })}>
+                Docs
               </Link>
-              <Link href="https://github.com/your-repo" target="_blank">
-                <Button variant="outline">Repo</Button>
+              <Link
+                href="https://github.com/your-repo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonVariants({ variant: "outline" })}
+              >
+                Repo
               </Link>
             </div>
           ),
