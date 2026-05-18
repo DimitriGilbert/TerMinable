@@ -8,7 +8,7 @@ interface GlowLinkProps {
   target?: string;
   rel?: string;
   color?: string;
-  size?: string | number;
+  size?: number;
   duration?: number;
   className?: string;
   children: ReactNode;
@@ -21,19 +21,19 @@ export function GlowLink({
   target = "_self",
   rel,
   color = "rgba(168, 85, 247, 0.8)",
-  size = "12px",
+  size = 12,
   duration = 0.5,
   className = "",
   glowClassName = "",
   scale = 1.1,
   children,
 }: GlowLinkProps) {
-  const sizeValue = typeof size === "number" ? `${size}px` : size;
+  const sizeValue = `${size}px`;
 
   return (
     <motion.span
       whileHover={{
-        textShadow: `0 0 ${sizeValue} ${color}, 0 0 ${parseFloat(sizeValue) * 2}px ${color}, 0 0 ${parseFloat(sizeValue) * 4}px ${color}`,
+        textShadow: `0 0 ${sizeValue} ${color}, 0 0 ${size * 2}px ${color}, 0 0 ${size * 4}px ${color}`,
         scale: scale,
         transition: { 
           duration, 

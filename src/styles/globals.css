@@ -43,7 +43,7 @@
       border-color: transparent;
     }
     50% {
-      border-color: var(--color-border);
+      border-color: var(--terminable-cursor-color);
     }
   }
 }

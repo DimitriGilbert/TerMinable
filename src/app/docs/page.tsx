@@ -52,7 +52,7 @@ export default function Docs() {
               target="_blank"
               rel="noopener noreferrer"
               color="rgba(173,251,28,0.8)"
-              size="12px"
+              size={12}
               duration={0.5}
               scale={1.1}
               className="font-semibold drop-shadow-[0_0_8px_rgba(173,251,28,0.8)]"
