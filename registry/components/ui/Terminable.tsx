@@ -327,12 +327,14 @@ export default function Terminable({
         }
 
         setDisplay((prev) => {
-          const newDisplay = [...prev];
-          const lastEntry = newDisplay[newDisplay.length - 1];
+          const lastEntry = prev[prev.length - 1];
           if (lastEntry?.type === "output") {
-            lastEntry.content = line.content;
+            return [
+              ...prev.slice(0, -1),
+              { ...lastEntry, content: line.content },
+            ];
           }
-          return newDisplay;
+          return prev;
         });
       }
     },
@@ -448,7 +450,6 @@ export default function Terminable({
         }
 
         cmd.onDone?.();
-        processingStateRef.current.currentIndex += 1;
       } catch (error: unknown) {
         if (error instanceof DOMException && error.name === "AbortError") {
           // Silently ignore aborts
@@ -458,6 +459,7 @@ export default function Terminable({
           error instanceof Error ? error : new Error(String(error));
         onError?.(err);
       } finally {
+        processingStateRef.current.currentIndex += 1;
         processingStateRef.current.isProcessing = false;
       }
     },
